@@ -1,0 +1,24 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+marshmallow = "*"
+sqlalchemy = "*"
+flask-sqlalchemy = "*"
+marshmallow-sqlalchemy = "*"
+requests = "*"
+flask-cors = "*"
+waitress = "*"
+pg8000 = "*"
+python-dotenv = "*"
+pytest = "*"
+pytest-cov = "*"
+faker = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.13"
