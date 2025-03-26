@@ -6,17 +6,17 @@ name = "pypi"
 [packages]
 flask = "*"
 marshmallow = "*"
-pytest = "~=7.2.0"
-pytest-cov = "~=4.0.0"
 sqlalchemy = "*"
 flask-sqlalchemy = "*"
 marshmallow-sqlalchemy = "*"
-faker = "*"
 requests = "*"
 flask-cors = "*"
 waitress = "*"
 pg8000 = "*"
 python-dotenv = "*"
+pytest = "*"
+pytest-cov = "*"
+faker = "*"
 
 [dev-packages]
 
