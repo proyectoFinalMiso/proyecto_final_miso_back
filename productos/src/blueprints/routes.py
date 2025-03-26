@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from src.commands.buscar_producto import BuscarProducto
 from src.commands.crear_fabricante import CrearFabricante
 from src.commands.crear_producto import CrearProducto
+from src.commands.buscador_producto import BuscadorProducto
 from src.commands.health_check import HealthCheck
 
 blueprint = Blueprint('productos', __name__)
@@ -28,3 +29,11 @@ def buscar_producto():
     print(body)
     response = BuscarProducto(body).execute()
     return jsonify(response['response']), response['status_code']
+
+@blueprint.post('/producto/buscador_producto')
+def buscar_producto():
+    body = request.get_json()
+    print(body)
+    response = BuscadorProducto(body).execute()
+    return jsonify(response['response']), response['status_code']
+
