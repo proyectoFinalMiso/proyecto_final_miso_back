@@ -3,10 +3,11 @@ import json
 from faker import Faker
 
 from app import app
+from src.commands.obtener_vendedor import ObtenerVendedor
 from src.commands.crear_vendedor import CrearVendedor
 from src.commands.base_command import BaseCommand
 
-class TestCrearVendedor():
+class TestObtenerVendedor():
 
     @pytest.fixture(scope='module')
     def gen_request(self):
@@ -23,11 +24,14 @@ class TestCrearVendedor():
         return request_bodies
     
     def test_base_model_inherit(self, gen_request):
-        route = CrearVendedor(gen_request[0])
+        route = ObtenerVendedor(gen_request[0])
         assert isinstance(route, BaseCommand)
 
-    def test_crear_vendedor(self, gen_request):
+    def test_obtener_vendedor(self, gen_request):
         with app.test_client() as client:
-            response = client.post('/vendedor/crear_vendedor', json=gen_request[0])
-            assert response.status_code == 201
-            assert response.json == {"msg": "Vendedor creado con exito"}
+            create_user = client.post('/vendedor/crear_vendedor', json=gen_request[0])
+            response = client.get('/vendedor/obtener_vendedor', json={'email': gen_request[0]['email']})
+            assert response.status_code == 200
+            assert response.json['email'] == gen_request[0]['email']
+            assert response.json['nombre'] == gen_request[0]['nombre']
+            
