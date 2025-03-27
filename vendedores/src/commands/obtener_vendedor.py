@@ -37,12 +37,7 @@ class ObtenerVendedor(BaseCommand):
             }
         
         info_vendedor = self.verificar_vendedor_existe()
-        print(type(info_vendedor))
-        print(info_vendedor)
-        print(info_vendedor.id)
-        print(info_vendedor.nombre)
-        print(info_vendedor.email)
-        
+
         if not info_vendedor:
             return {
                 "response": {
