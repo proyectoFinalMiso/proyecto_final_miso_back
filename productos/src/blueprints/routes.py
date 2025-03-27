@@ -30,8 +30,8 @@ def buscar_producto():
     response = BuscarProducto(body).execute()
     return jsonify(response['response']), response['status_code']
 
-@blueprint.post('/producto/buscador_producto')
-def buscar_producto():
+@blueprint.get('/producto/buscador_producto')
+def buscador_producto():
     body = request.get_json()
     print(body)
     response = BuscadorProducto(body).execute()

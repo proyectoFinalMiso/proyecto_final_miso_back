@@ -1,6 +1,6 @@
 from sqlalchemy import or_
 from src.commands.base_command import BaseCommand
-from src.models.model import Producto
+from src.models.model import Producto, Fabricante, db
 
 
 class BuscadorProducto(BaseCommand):
@@ -8,43 +8,57 @@ class BuscadorProducto(BaseCommand):
         self.body = request_body
 
     def check_campos_requeridos(self) -> bool:
-        if self.body.get("concepto"):
+        if self.body.get("clave"):
             return True
         else:
             return False
 
     def buscar_producto(self) -> bool:
 
-        concepto = f"%{self.body['concepto']}%"
+        clave = f"%{self.body['clave']}%"
 
-        return Producto.query.filter(
+        return db.session.query(Producto, Fabricante.nombre).join(Fabricante).filter(
             or_(
-                Producto.sku.ilike(concepto),
-                Producto.nombre.ilike(concepto),
-                Producto.fabricante.ilike(concepto)
+                Producto.sku.ilike(clave),
+                Producto.nombre.ilike(clave),
+                Producto.fabricante.ilike(clave)
             )
         ).all()
-        # return Producto.query.filter((Producto.sku == self.body["sku"])).first()
 
     def execute(self):
         if not self.check_campos_requeridos():
             return {
                 "response": {
-                    "msg": "Solo se pueden buscar productos por medio del SKU"
+                    "msg": "Clave para buscar producto no valida"
                 },
                 "status_code": 400,
             }
 
-        producto = self.buscar_producto()
+        productos = self.buscar_producto()
 
-        if not producto:
+        print(productos)
+
+        productos_serializado = [
+            {
+                "id": producto.id,
+                "nombre": producto.nombre,
+                "sku": producto.sku,
+                "volumen": producto.volumen,
+                "fabricante": nombre_fabricante,
+                "valorUnitario": producto.valorUnitario,
+                "fechaCreacion": producto.fechaCreacion,
+            }
+            for producto, nombre_fabricante in productos
+        ]
+
+
+        if not productos:
             return {
                 "response": {"msg": "No se ha encontrado el producto solicitado"},
                 "status_code": 404,
             }
-        producto = producto.__dict__
-        del producto["_sa_instance_state"]
+
         return {
-            "response": {"msg": "Producto encontrado", "body": producto},
+            "response": {"productos": productos_serializado},
             "status_code": 200,
         }

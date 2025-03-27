@@ -13,8 +13,6 @@ from src.models.model import db
 load_dotenv('.env')
 
 app = Flask(__name__)
-
-app = Flask(__name__)
 # CORS(app, resources={r"/*": {"origins": "*"}})
 app.register_blueprint(blueprint)
 
