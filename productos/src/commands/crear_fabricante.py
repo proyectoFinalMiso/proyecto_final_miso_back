@@ -61,7 +61,8 @@ class CrearFabricante(BaseCommand):
             db.session.commit()
             return {
                 "response": {
-                    "msg": "Fabricante creado con exito"
+                    "msg": "Fabricante creado con exito",
+                    "id": f"{id_fabricante}"
                 },
                 "status_code": 201
             }
