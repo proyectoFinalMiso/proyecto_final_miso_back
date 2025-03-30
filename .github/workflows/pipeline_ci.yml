@@ -1,0 +1,78 @@
+name: Pull Request Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-gestorPedidos:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install pipenv for gestorPedidos
+      working-directory: ./gestorPedidos
+      run: pip install pipenv
+    - name: Install dependencies for gestorPedidos
+      working-directory: ./gestorPedidos
+      run: pipenv install
+    - name: Synchronize .lock file
+      working-directory: ./gestorPedidos
+      run: pipenv sync
+    - name: Run unit tests for gestorPedidos
+      working-directory: ./gestorPedidos
+      run: pipenv run pytest --cov=src --cov-fail-under=70
+
+  test-productos:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install pipenv for productos
+      working-directory: ./productos
+      run: pip install pipenv
+    - name: Install dependencies for productos
+      working-directory: ./productos
+      run: pipenv install
+    - name: Synchronize .lock file
+      working-directory: ./productos
+      run: pipenv sync
+    - name: Run unit tests for productos
+      working-directory: ./productos
+      run: pipenv run pytest --cov=src --cov-fail-under=70
+
+  test-vendedores:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install pipenv for vendedores
+      working-directory: ./vendedores
+      run: pip install pipenv
+    - name: Install dependencies for vendedores
+      working-directory: ./vendedores
+      run: pipenv install
+    - name: Synchronize .lock file
+      working-directory: ./vendedores
+      run: pipenv sync
+    - name: Run unit tests for vendedores
+      working-directory: ./vendedores
+      run: pipenv run pytest --cov=src --cov-fail-under=70
+
+  # test-bodega:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Install pipenv for bodega
+  #     working-directory: ./bodega
+  #     run: pip install pipenv
+  #   - name: Install dependencies for bodega
+  #     working-directory: ./bodega
+  #     run: pipenv install
+  #   - name: Synchronize .lock file
+  #     working-directory: ./bodega
+  #     run: pipenv sync
+  #   - name: Run unit tests for bodega
+  #     working-directory: ./bodega
+  #     run: pipenv run pytest --cov=src --cov-fail-under=70
+
+  
+    
