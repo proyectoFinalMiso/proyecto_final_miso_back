@@ -5,6 +5,10 @@ from src.commands.bodega.crear_bodega import CrearBodega
 from src.commands.bodega.listar_bodega import ListarBodega
 from src.commands.bodega.buscador_bodega import BuscadorBodega
 from src.commands.bodega.eliminar_bodega import EliminarBodega
+from src.commands.posicion.crear_posicion import CrearPosicion
+from src.commands.posicion.listar_posiciones import ListarPosicion
+from src.commands.posicion.buscar_posicion import BuscarPosicion
+
 
 blueprint = Blueprint('gestorPedidos', __name__)
 
@@ -33,4 +37,21 @@ def buscar_bodega():
 def eliminar_bodega():
     request_body = request.get_json()
     response = EliminarBodega(request_body).execute()
+    return jsonify(response['response']), response['status_code']
+
+@blueprint.post('/posicion/crear_posicion')
+def crear_posicion():
+    request_body = request.get_json()
+    response = CrearPosicion(request_body).execute()
+    return jsonify(response['response']), response['status_code']
+
+@blueprint.get('/posicion/listar_posiciones')
+def listar_posiciones():
+    response = ListarPosicion().execute()
+    return jsonify(response['response']), response['status_code']
+
+@blueprint.get('/posicion/buscar_posicion')
+def buscar_posicion():
+    request_body = request.get_json()
+    response = BuscarPosicion(request_body).execute()
     return jsonify(response['response']), response['status_code']
