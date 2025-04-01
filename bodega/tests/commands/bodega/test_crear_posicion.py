@@ -40,7 +40,7 @@ class TestCrearPosicion():
         route = CrearPosicion(gen_request_posicion[0])
         assert isinstance(route, BaseCommand)
 
-    def test_crear_posicion_campos_requeridos(self, gen_request_posicion, gen_request_bodega):
+    def test_crear_posicion(self, gen_request_posicion, gen_request_bodega):
         with app.test_client() as client:
 
             response_bodega = client.post('/bodega/crear_bodega', json=gen_request_bodega[0])

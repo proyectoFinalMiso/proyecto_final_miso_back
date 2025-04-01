@@ -8,7 +8,8 @@ from src.commands.bodega.eliminar_bodega import EliminarBodega
 from src.commands.posicion.crear_posicion import CrearPosicion
 from src.commands.posicion.listar_posiciones import ListarPosicion
 from src.commands.posicion.buscar_posicion import BuscarPosicion
-
+from src.commands.inventario.crear_producto import CrearProducto
+from src.commands.inventario.ingresar_inventario import IngresarInventario
 
 blueprint = Blueprint('gestorPedidos', __name__)
 
@@ -54,4 +55,16 @@ def listar_posiciones():
 def buscar_posicion():
     request_body = request.get_json()
     response = BuscarPosicion(request_body).execute()
+    return jsonify(response['response']), response['status_code']
+
+@blueprint.post('/inventario/crear_producto')
+def crear_producto():
+    request_body = request.get_json()
+    response = CrearProducto(request_body).execute()
+    return jsonify(response['response']), response['status_code']
+
+@blueprint.post('/inventario/ingresar_inventario')
+def ingresar_inventario():
+    request_body = request.get_json()
+    response = IngresarInventario(request_body).execute()
     return jsonify(response['response']), response['status_code']

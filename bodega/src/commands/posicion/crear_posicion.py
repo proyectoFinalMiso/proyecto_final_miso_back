@@ -33,11 +33,13 @@ class CrearPosicion(BaseCommand):
             return False
         
     def agregar_posicion_a_bodega(self, id_posicion: str, id_bodega: str):
+        
         bodega = Bodega.query.filter(Bodega.id == id_bodega).first()
 
         if not bodega.posiciones:
             bodega.posiciones = []
-        bodega.posiciones.append(id_posicion)
+
+        bodega.posiciones = bodega.posiciones + [id_posicion]
         db.session.commit()
 
     def execute(self):
