@@ -1,8 +1,9 @@
 from flask import Blueprint, jsonify, request
-from src.commands.buscar_producto import BuscarProducto
+from src.commands.listar_fabricantes import ListarFabricantes
 from src.commands.crear_fabricante import CrearFabricante
+from src.commands.listar_productos import ListarProductos
 from src.commands.crear_producto import CrearProducto
-from src.commands.buscador_producto import BuscadorProducto
+from src.commands.buscar_producto import BuscadorProducto
 from src.commands.health_check import HealthCheck
 
 blueprint = Blueprint('productos', __name__)
@@ -23,17 +24,18 @@ def crear_producto():
     response = CrearProducto(body).execute()
     return jsonify(response['response']), response['status_code']
 
-@blueprint.post('/producto/buscar_sku')
-def buscar_producto():
-    body = request.get_json()
-    print(body)
-    response = BuscarProducto(body).execute()
-    return jsonify(response['response']), response['status_code']
-
 @blueprint.get('/producto/buscador_producto')
 def buscador_producto():
     body = request.get_json()
-    print(body)
     response = BuscadorProducto(body).execute()
     return jsonify(response['response']), response['status_code']
 
+@blueprint.get('/fabricante/listar_fabricantes')
+def listar_fabricantes():
+    response = ListarFabricantes().execute()
+    return jsonify(response['response']), response['status_code']
+
+@blueprint.get('/fabricante/listar_productos')
+def listar_productos():
+    response = ListarProductos().execute()
+    return jsonify(response['response']), response['status_code']
