@@ -33,7 +33,8 @@ class TestCrearProducto():
             request_body = {
                 'id_fabricante': fake.uuid4(),
                 'nombre': fake.name(),
-                'valorUnitario': fake.pyfloat()
+                'valorUnitario': fake.pyfloat(),
+                'volumen': fake.pyfloat()
             }
             request_bodies.append(request_body)
 

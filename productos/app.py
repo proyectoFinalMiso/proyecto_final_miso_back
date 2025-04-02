@@ -11,7 +11,7 @@ from src.models.model import db
 load_dotenv('.env')
 
 app = Flask(__name__)
-# CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 app.register_blueprint(blueprint)
 
 def config_app(db_url):
@@ -21,15 +21,12 @@ def config_app(db_url):
         db.create_all()
 
 if __name__ == '__main__':
-    # db_url = database_host()
-    # config_app(db_url)
+    db_url = database_host()
+    config_app(db_url)
     
     if argv[1] == 'dev':
-        print(argv[1])
-        load_dotenv(".env.test")
-        db_url = f"sqlite:///microservice_.db"
+        db_url = "sqlite:///microservice_.db"
         config_app(db_url)
         app.run(debug=True, host="0.0.0.0", port=3001)
     else:
-        # serve(app, host="0.0.0.0", port=3001)
-        print('bad command')
+        serve(app, host="0.0.0.0", port=3001)
