@@ -13,7 +13,8 @@ class BuscarFabricante(BaseCommand):
             return False
 
     def buscar_fabricante(self) -> bool:
-        return Fabricante.query.filter((Fabricante.nombre == self.body["nombre"])).first()
+        fabricante = Fabricante.query.filter((Fabricante.nombre == self.body["nombre"])).first()
+        return fabricante.to_dict()
 
     def execute(self):
         if not self.check_campos_requeridos():
@@ -24,15 +25,14 @@ class BuscarFabricante(BaseCommand):
                 "status_code": 400,
             }
 
-        fabricante = self.buscar_producto()
+        fabricante = self.buscar_fabricante()
 
         if not fabricante:
             return {
                 "response": {"msg": "No se ha encontrado el fabricante solicitado"},
                 "status_code": 404,
             }
-        fabricante = fabricante.__dict__
-        del fabricante["_sa_instance_state"]
+
         return {
             "response": {"msg": "Fabricante encontrado", "body": fabricante},
             "status_code": 200,

@@ -4,10 +4,12 @@ from src.models.model import Fabricante
 
 class ListarFabricantes(BaseCommand):
     def buscar_fabricantes(self) -> bool:
-        return Fabricante.query.all()
+        fabricantes = Fabricante.query.all()
+        return [fabricante.to_dict() for fabricante in fabricantes]
 
     def execute(self):
         fabricantes = self.buscar_fabricantes()
+        print(fabricantes)
 
         if not fabricantes:
             return {

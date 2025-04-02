@@ -3,7 +3,7 @@ import json
 from faker import Faker
 
 from app import app
-from productos.src.commands.buscar_producto import BuscadorProducto
+from src.commands.buscar_producto import BuscadorProducto
 from src.commands.base_command import BaseCommand
 
 
