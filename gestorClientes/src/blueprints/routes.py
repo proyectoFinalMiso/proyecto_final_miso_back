@@ -3,6 +3,7 @@ from src.commands.crear_cliente import CrearCliente
 from src.commands.consultar_cliente import ConsultarCliente
 from src.commands.listar_clientes import ListarClientes
 from src.commands.asignar_vendedor import AsignarVendedor
+from src.commands.login_cliente import LoginCliente
 from src.commands.health_check import HealthCheck
 
 blueprint = Blueprint('gestorClientes', __name__)
@@ -15,6 +16,12 @@ def health_check():
 def crear_cliente():
     body = request.get_json()
     response = CrearCliente(body).execute()
+    return jsonify(response['response']), response['status_code']
+
+@blueprint.post('/cliente/login')
+def login():
+    body = request.get_json()
+    response = LoginCliente(body).execute()
     return jsonify(response['response']), response['status_code']
 
 @blueprint.get('/cliente/<cliente_id>')

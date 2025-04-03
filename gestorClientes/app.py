@@ -18,11 +18,11 @@ def config_app(db_url):
 
 if __name__ == '__main__':
     try:
-        if argv[1] == "develop":
+        if argv[1] == "dev":
             load_dotenv(".env.test")
-            db_url = database_host()
+            db_url = f"sqlite:///microservice_.db"
             config_app(db_url)
-            app.run(host="0.0.0.0", port=3002, debug=True)
+            app.run(host="0.0.0.0", port=3005, debug=True)
 
         else:
             load_dotenv(".env.production")
