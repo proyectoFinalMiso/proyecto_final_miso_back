@@ -1,4 +1,3 @@
-from sqlalchemy import or_
 from src.commands.base_command import BaseCommand
 from src.models.model import Fabricante
 
