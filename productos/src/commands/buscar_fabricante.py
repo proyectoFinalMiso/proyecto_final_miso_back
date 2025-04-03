@@ -1,3 +1,4 @@
+from sqlalchemy import or_
 from src.commands.base_command import BaseCommand
 from src.models.model import Fabricante
 
@@ -13,8 +14,13 @@ class BuscarFabricante(BaseCommand):
             return False
 
     def buscar_fabricante(self) -> bool:
-        fabricante = Fabricante.query.filter((Fabricante.nombre == self.body["nombre"])).first()
-        return fabricante.to_dict()
+        clave = self.body['nombre']
+        clave_str = str(clave)
+        clave_like = f"%{clave_str}%"
+
+        fabricante = Fabricante.query.filter(Fabricante.nombre.ilike(clave_like)).first()
+            
+        return fabricante
 
     def execute(self):
         if not self.check_campos_requeridos():
@@ -34,6 +40,6 @@ class BuscarFabricante(BaseCommand):
             }
 
         return {
-            "response": {"msg": "Fabricante encontrado", "body": fabricante},
+            "response": {"msg": "Fabricante encontrado", "body": fabricante.to_dict()},
             "status_code": 200,
         }

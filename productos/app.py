@@ -25,8 +25,6 @@ if __name__ == '__main__':
     config_app(db_url)
     
     if argv[1] == 'dev':
-        db_url = "sqlite:///microservice_.db"
-        config_app(db_url)
         app.run(debug=True, host="0.0.0.0", port=3001)
     else:
         serve(app, host="0.0.0.0", port=3001)
