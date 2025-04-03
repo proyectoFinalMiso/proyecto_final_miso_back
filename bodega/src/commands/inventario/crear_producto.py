@@ -14,7 +14,7 @@ class CrearProducto(BaseCommand):
     
     def check_campos_requeridos(self) -> bool:
 
-        required_fields = ['nombre', 'bodega', 'posicion', 'lote', 'cantidad', 'sku']
+        required_fields = ['nombre', 'bodega', 'posicion', 'lote', 'cantidad', 'sku', 'valorUnitario']
 
         if not all(field in self.producto_template for field in required_fields):
             return False
@@ -101,6 +101,7 @@ class CrearProducto(BaseCommand):
         nuevo_producto = Inventario(
             id=id_producto,
             nombre=self.producto_template['nombre'],
+            valorUnitario=self.producto_template['valorUnitario'],
             bodega=self.producto_template['bodega'],
             posicion=self.producto_template['posicion'],
             lote=self.producto_template['lote'],
@@ -130,6 +131,7 @@ class CrearProducto(BaseCommand):
                     "msg": "Producto creado correctamente",
                     "id": nuevo_producto.id,
                     "nombre": nuevo_producto.nombre,
+                    "valorUnitario": nuevo_producto.valorUnitario,
                     "bodega": nuevo_producto.bodega,
                     "posicion": nuevo_producto.posicion,
                     "lote": nuevo_producto.lote,

@@ -17,6 +17,7 @@ flask-cors = "*"
 waitress = "*"
 pg8000 = "*"
 python-dotenv = "*"
+colorama = "*"
 
 [dev-packages]
 

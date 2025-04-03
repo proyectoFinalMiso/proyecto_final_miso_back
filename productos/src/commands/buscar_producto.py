@@ -1,4 +1,4 @@
-from sqlalchemy import or_
+from sqlalchemy import or_, cast, String
 from src.commands.base_command import BaseCommand
 from src.models.model import Producto, Fabricante, db
 
@@ -15,15 +15,29 @@ class BuscadorProducto(BaseCommand):
 
     def buscar_producto(self) -> bool:
 
-        clave = f"%{self.body['clave']}%"
+        clave = self.body['clave']
+        clave_str = str(clave)
+        clave_like = f"%{clave_str}%"
 
-        return db.session.query(Producto, Fabricante.nombre).join(Fabricante).filter(
-            or_(
-                Producto.sku.ilike(clave),
-                Producto.nombre.ilike(clave),
-                Producto.fabricante.ilike(clave)
-            )
-        ).all()
+        productos = db.session.query(
+            Producto.id,
+            Producto.nombre,
+            Producto.sku,
+            Producto.volumen,
+            Producto.valorUnitario,
+            Producto.fechaCreacion,
+            Producto.fabricante,
+            Fabricante.nombre.label("fabricante_nombre")
+            ).join(Fabricante).filter(
+                or_(
+                    cast(Producto.sku, String).ilike(clave_like),
+                    Producto.nombre.ilike(clave_like),
+                )
+            ).all()
+        
+        return productos
+        
+
 
     def execute(self):
         if not self.check_campos_requeridos():
@@ -42,11 +56,12 @@ class BuscadorProducto(BaseCommand):
                 "nombre": producto.nombre,
                 "sku": producto.sku,
                 "volumen": producto.volumen,
-                "fabricante": nombre_fabricante,
+                "id_fabricante": producto.fabricante,
+                "fabricante": producto.fabricante_nombre,
                 "valorUnitario": producto.valorUnitario,
                 "fechaCreacion": producto.fechaCreacion,
             }
-            for producto, nombre_fabricante in productos
+            for producto in productos
         ]
 
 

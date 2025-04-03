@@ -43,6 +43,7 @@ class TestCrearProducto():
         for i in range(10):
             request_body = {
                 'nombre': fake.name(),
+                'valorUnitario': fake.pyfloat(),
                 'lote': fake.name(),
                 'cantidad': fake.pyint(),
                 'fechaIgreso': datetime.now(),

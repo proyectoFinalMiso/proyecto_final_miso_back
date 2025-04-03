@@ -25,6 +25,7 @@ class Inventario(db.Model):
 
     id = db.Column(db.String, primary_key=True)
     nombre = db.Column(db.String, nullable=False)
+    valorUnitario = db.Column(db.Float, nullable=False)
     bodega = db.Column(db.String, db.ForeignKey('bodega.id'), nullable=False)
     posicion = db.Column(db.String, db.ForeignKey('posicion.id'), nullable=False)
     lote = db.Column(db.String, nullable=False)
@@ -32,3 +33,17 @@ class Inventario(db.Model):
     cantidadReservada = db.Column(db.Integer, default=0)
     fechaIgreso = db.Column(db.DateTime, nullable=False)
     sku = db.Column(db.Integer, Identity(start=10001, cycle=True), nullable=False)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'nombre': self.nombre,
+            'valorUnitario': self.valorUnitario,
+            'bodega': self.bodega,
+            'posicion': self.posicion,
+            'lote': self.lote,
+            'cantidadDisponible': self.cantidadDisponible,
+            'cantidadReservada': self.cantidadReservada,
+            'fechaIgreso': str(self.fechaIgreso),
+            'sku': self.sku
+        }
