@@ -13,7 +13,8 @@ class TestCrearCliente:
     def cliente_data(self):
         return {
             "nombre": fake.name(),
-            "correo": fake.email()
+            "correo": fake.email(),
+            "contrasena": fake.password()
         }
 
     @pytest.fixture
@@ -45,7 +46,8 @@ class TestCrearCliente:
         # Arrange
         incomplete_data = {
             "nombre": fake.name(),
-            # missing correo
+            "correo": fake.email()
+            # missing contrasena
         }
         command = CrearCliente(incomplete_data)
         
@@ -59,7 +61,8 @@ class TestCrearCliente:
         # Arrange
         invalid_data = {
             "nombre": "",
-            "correo": fake.email()
+            "correo": fake.email(),
+            "contrasena": fake.password()
         }
         command = CrearCliente(invalid_data)
         
@@ -135,9 +138,11 @@ class TestCrearCliente:
         assert result["status_code"] == 400
         assert "Campos requeridos no cumplidos" in result["response"]["msg"]
     
+    @patch('src.commands.crear_cliente.CrearCliente.check_campos_requeridos')
     @patch('src.commands.crear_cliente.CrearCliente.verificar_cliente_existe')
-    def test_execute_cliente_ya_existe(self, mock_verificar_cliente_existe, cliente_data):
+    def test_execute_cliente_ya_existe(self, mock_verificar_cliente_existe, mock_check_campos_requeridos, cliente_data):
         # Arrange
+        mock_check_campos_requeridos.return_value = True
         mock_verificar_cliente_existe.return_value = True
         command = CrearCliente(cliente_data)
         
@@ -148,16 +153,20 @@ class TestCrearCliente:
         assert result["status_code"] == 400
         assert "Cliente ya existe" in result["response"]["msg"]
     
+    @patch('src.commands.crear_cliente.CrearCliente.check_campos_requeridos')
     @patch('src.commands.crear_cliente.CrearCliente.verificar_cliente_existe')
     @patch('src.commands.crear_cliente.CrearCliente.verificar_id_existe')
     @patch('src.commands.crear_cliente.CrearCliente.crear_uuid')
-    def test_execute_success(self, mock_crear_uuid, mock_verificar_id_existe, 
-                             mock_verificar_cliente_existe, cliente_data, mock_db_session):
+    @patch('src.commands.crear_cliente.generate_password_hash')
+    def test_execute_success(self, mock_hash, mock_crear_uuid, mock_verificar_id_existe, 
+                             mock_verificar_cliente_existe, mock_check_campos_requeridos, cliente_data, mock_db_session):
         # Arrange
+        mock_check_campos_requeridos.return_value = True
         mock_verificar_cliente_existe.return_value = False
         mock_verificar_id_existe.return_value = False
         mock_uuid = fake.uuid4()
         mock_crear_uuid.return_value = mock_uuid
+        mock_hash.return_value = "hashed_password"
         command = CrearCliente(cliente_data)
         
         # Act
@@ -170,16 +179,20 @@ class TestCrearCliente:
         mock_db_session.add.assert_called_once()
         mock_db_session.commit.assert_called_once()
     
+    @patch('src.commands.crear_cliente.CrearCliente.check_campos_requeridos')
     @patch('src.commands.crear_cliente.CrearCliente.verificar_cliente_existe')
     @patch('src.commands.crear_cliente.CrearCliente.verificar_id_existe')
     @patch('src.commands.crear_cliente.CrearCliente.crear_uuid')
-    def test_execute_db_exception(self, mock_crear_uuid, mock_verificar_id_existe, 
-                                  mock_verificar_cliente_existe, cliente_data, mock_db_session):
+    @patch('src.commands.crear_cliente.generate_password_hash')
+    def test_execute_db_exception(self, mock_hash, mock_crear_uuid, mock_verificar_id_existe, 
+                                  mock_verificar_cliente_existe, mock_check_campos_requeridos, cliente_data, mock_db_session):
         # Arrange
+        mock_check_campos_requeridos.return_value = True
         mock_verificar_cliente_existe.return_value = False
         mock_verificar_id_existe.return_value = False
         mock_uuid = fake.uuid4()
         mock_crear_uuid.return_value = mock_uuid
+        mock_hash.return_value = "hashed_password"
         mock_db_session.commit.side_effect = Exception("DB Error")
         command = CrearCliente(cliente_data)
         

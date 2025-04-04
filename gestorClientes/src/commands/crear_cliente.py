@@ -1,4 +1,5 @@
 from uuid import uuid4, UUID
+from werkzeug.security import generate_password_hash
 
 from src.commands.base_command import BaseCommand
 from src.models.model import db, Cliente
@@ -36,6 +37,7 @@ class CrearCliente(BaseCommand):
         required_fields = [
             "nombre",
             "correo",
+            "contrasena"
         ]
 
         if not all(field in self.body for field in required_fields):
@@ -71,11 +73,19 @@ class CrearCliente(BaseCommand):
             if not self.verificar_id_existe(id_cliente):
                 id_cliente_unico = True
 
+        # Hash the password
+        hashed_password = generate_password_hash(self.body['contrasena'])
+
         nuevo_cliente = Cliente(
             id=id_cliente,
             nombre=self.body['nombre'],
             correo=self.body['correo'],
+            contrasena=hashed_password
         )
+        
+        if 'vendedorAsociado' in self.body and self.body['vendedorAsociado']:
+            nuevo_cliente.vendedorAsociado = self.body['vendedorAsociado']
+            
         db.session.add(nuevo_cliente)
 
         try:
