@@ -1,7 +1,4 @@
 import pytest
-from faker import Faker
-
-from app import app
 from src.models.model import db, Fabricante
 from src.commands.crear_producto_masivo import CrearProductoMasivo
 from src.commands.procesar_archivo_productos import ProcesarArchivoProductos

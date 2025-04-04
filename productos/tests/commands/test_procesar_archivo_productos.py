@@ -1,6 +1,5 @@
 import pytest
 import os
-from app import app
 from src.commands.procesar_archivo_productos import ProcesarArchivoProductos
 from src.commands.base_command import BaseCommand
 
