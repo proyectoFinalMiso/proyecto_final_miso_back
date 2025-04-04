@@ -30,14 +30,14 @@ class TestCrearFabricante():
     def test_crear_fabricante(self, gen_request):
         # Test to ensure the route creation works
         with app.test_client() as client:
-            response_fabricante = client.post('/fabricante/crear_fabricante', json=gen_request[0])
+            response_fabricante = client.post('/crear_fabricante', json=gen_request[0])
             assert response_fabricante.status_code == 201
             assert response_fabricante.json["msg"] == "Fabricante creado con exito"
 
     def test_crear_fabricante_existe(self, gen_request):
         # Test to ensure the route creation works
         with app.test_client() as client:
-            response_fabricante = client.post('/fabricante/crear_fabricante', json=gen_request[0])
+            response_fabricante = client.post('/crear_fabricante', json=gen_request[0])
             assert response_fabricante.status_code == 400
             assert response_fabricante.json == {"msg": "Fabricante ya existe"}
 
@@ -47,6 +47,6 @@ class TestCrearFabricante():
             request_body = {
                 'nombre': gen_request[0]['nombre']
             }
-            response_fabricante = client.post('/fabricante/crear_fabricante', json=request_body)
+            response_fabricante = client.post('/crear_fabricante', json=request_body)
             assert response_fabricante.status_code == 400
             assert response_fabricante.json == {"msg": "Campos requeridos no cumplidos"}

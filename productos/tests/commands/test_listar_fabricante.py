@@ -31,9 +31,9 @@ class TestListarFabricantes():
         
         with app.test_client() as client:
             for fabricante in gen_request:
-                client.post('/fabricante/crear_fabricante', json=fabricante)
+                client.post('/crear_fabricante', json=fabricante)
             
-            response = client.get('/fabricante/listar_fabricantes')        
+            response = client.get('/listar_fabricantes')        
             assert response.status_code == 200
             assert len(response.json['body']) > 0
 

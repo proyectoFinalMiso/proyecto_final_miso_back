@@ -1,10 +1,8 @@
 import pytest
-import json
 from faker import Faker
 
 from app import app
 from src.commands.crear_producto import CrearProducto
-from src.commands.crear_fabricante import CrearFabricante
 from src.commands.base_command import BaseCommand
 
 class TestCrearProducto():
@@ -49,7 +47,7 @@ class TestCrearProducto():
     def test_crear_producto(self, gen_request_fabricante, gen_request_producto):
         # Test to ensure the route creation works
         with app.test_client() as client:
-            response_fabricante = client.post('/fabricante/crear_fabricante', json=gen_request_fabricante[0])
+            response_fabricante = client.post('/crear_fabricante', json=gen_request_fabricante[0])
             assert response_fabricante.status_code == 201
 
             print(response_fabricante.json)
@@ -57,7 +55,7 @@ class TestCrearProducto():
             crear_producto_body = gen_request_producto[0]
             crear_producto_body['id_fabricante'] = response_fabricante.json['id']
 
-            response = client.post('/producto/crear_producto', json=crear_producto_body)
+            response = client.post('/crear_producto', json=crear_producto_body)
             print(response.json)
             assert response.status_code == 201
             assert response.json == {"msg": "Producto creado exitosamente"}
@@ -65,7 +63,7 @@ class TestCrearProducto():
     def test_crear_producto_existe(self, gen_request_fabricante, gen_request_producto):
         # Test to ensure the route creation works
         with app.test_client() as client:
-            response_fabricante = client.post('/fabricante/crear_fabricante', json=gen_request_fabricante[1])
+            response_fabricante = client.post('/crear_fabricante', json=gen_request_fabricante[1])
             assert response_fabricante.status_code == 201
 
             print(response_fabricante.json)
@@ -73,9 +71,9 @@ class TestCrearProducto():
             crear_producto_body = gen_request_producto[0]
             crear_producto_body['id_fabricante'] = response_fabricante.json['id']
 
-            response = client.post('/producto/crear_producto', json=crear_producto_body)
+            client.post('/crear_producto', json=crear_producto_body)
 
-            response_bad = client.post('/producto/crear_producto', json=crear_producto_body)
+            response_bad = client.post('/crear_producto', json=crear_producto_body)
             print(response_bad.json)
             assert response_bad.status_code == 400
             assert response_bad.json == {"msg": "Producto ya existe"}
@@ -84,7 +82,7 @@ class TestCrearProducto():
 
         # Test to ensure the route creation works
         with app.test_client() as client:
-            response_fabricante = client.post('/fabricante/crear_fabricante', json=gen_request_fabricante[2])
+            response_fabricante = client.post('/crear_fabricante', json=gen_request_fabricante[2])
             assert response_fabricante.status_code == 201
 
             print(response_fabricante.json)
@@ -93,7 +91,7 @@ class TestCrearProducto():
             crear_producto_body['id_fabricante'] = response_fabricante.json['id']
             crear_producto_body.pop('nombre')
 
-            response = client.post('/producto/crear_producto', json=crear_producto_body)
+            response = client.post('/crear_producto', json=crear_producto_body)
             print(response.json)
             assert response.status_code == 400
             assert response.json == {"msg": "Campos requeridos no cumplidos"}
