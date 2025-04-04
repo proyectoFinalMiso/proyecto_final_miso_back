@@ -47,14 +47,14 @@ class TestListarProductos():
     def test_listar_productos(self, gen_request_fabricante, gen_request_producto):
         
         with app.test_client() as client:
-            client.post('/fabricante/crear_fabricante', json=gen_request_fabricante[0])
-            fabricante = client.post('/fabricante/buscar_fabricante', json=gen_request_fabricante[0])
+            client.post('/crear_fabricante', json=gen_request_fabricante[0])
+            fabricante = client.post('/buscar_fabricante', json=gen_request_fabricante[0])
             print(fabricante)
             for producto in gen_request_producto:
                 producto['id_fabricante'] = fabricante.json['body']['id']
-                client.post('/producto/crear_producto', json=producto)
+                client.post('/procto/crear_producto', json=producto)
             
-            response = client.get('/producto/listar_productos')        
+            response = client.get('/listar_productos')        
             assert response.status_code == 200
             assert len(response.json['body']) > 0
 

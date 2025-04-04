@@ -30,7 +30,7 @@ class TestBuscadorProducto():
     def test_buscar_producto_no_existe(self, gen_request):
         # Test to ensure the route creation works
         with app.test_client() as client:
-            response = client.post('/producto/buscar_producto', json=gen_request[0])
+            response = client.post('/buscar_producto', json=gen_request[0])
         
             assert response.status_code == 404
             assert response.json['msg'] == 'No se ha encontrado el producto solicitado'
@@ -38,7 +38,7 @@ class TestBuscadorProducto():
     def test_buscar_producto_campos_requeridos(self, gen_request):
         # Test to ensure the route creation works
         with app.test_client() as client:
-            response = client.post('/producto/buscar_producto', json={"clave_mal":"1234567890"})
+            response = client.post('/buscar_producto', json={"clave_mal":"1234567890"})
         
             assert response.status_code == 400
             assert response.json['msg'] == 'Clave para buscar producto no valida'

@@ -18,6 +18,8 @@ waitress = "*"
 pg8000 = "*"
 python-dotenv = "*"
 colorama = "*"
+pandas = "*"
+openpyxl = "*"
 
 [dev-packages]
 

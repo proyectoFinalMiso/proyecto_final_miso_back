@@ -58,8 +58,7 @@ class CrearPedido(BaseCommand):
         )
         db.session.add(nuevo_pedido)
 
-        try:
-            
+        try:            
             db.session.commit()
             return {
                 "response": {
