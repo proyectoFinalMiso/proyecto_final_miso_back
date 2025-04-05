@@ -41,7 +41,7 @@ class TestRoutes:
             "status_code": 201
         }
         
-        response = client.post('/cliente/crear', 
+        response = client.post('/crear', 
                               json=cliente_data, 
                               content_type='application/json')
         
@@ -63,7 +63,7 @@ class TestRoutes:
             "status_code": 200
         }
         
-        response = client.get(f'/cliente/{cliente_id}')
+        response = client.get(f'/{cliente_id}')
         
         assert response.status_code == 200
         data = json.loads(response.data.decode('utf-8'))
@@ -87,7 +87,7 @@ class TestRoutes:
             "status_code": 200
         }
         
-        response = client.get('/clientes')
+        response = client.get('/')
         
         assert response.status_code == 200
         data = json.loads(response.data.decode('utf-8'))
@@ -111,7 +111,7 @@ class TestRoutes:
             "status_code": 200
         }
         
-        response = client.post(f'/cliente/{cliente_id}/asignar_vendedor/{vendedor_id}')
+        response = client.post(f'/{cliente_id}/asignar_vendedor/{vendedor_id}')
         
         assert response.status_code == 200
         data = json.loads(response.data.decode('utf-8'))
