@@ -43,7 +43,9 @@ class BuscadorBodega(BaseCommand):
                     "id": bodega.id,
                     "nombre": bodega.nombre,
                     "direccion": bodega.direccion,
-                    "posicion": bodega.posiciones if bodega.posiciones else "Aun no tiene posiciones"
+                    "posicion": bodega.posiciones if bodega.posiciones else "Aun no tiene posiciones",
+                    "latitude": bodega.latitude,
+                    "longitude": bodega.longitude,
                 }
                 for bodega in bodegas
             ]
