@@ -12,6 +12,6 @@ RUN pipenv sync
 
 COPY . .
 
-EXPOSE 3003
+EXPOSE 3007
 
 CMD [ "pipenv", "run", "python", "app.py", "production"] 
