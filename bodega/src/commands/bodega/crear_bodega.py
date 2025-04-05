@@ -13,7 +13,7 @@ class CrearBodega(BaseCommand):
     
     def check_campos_requeridos(self) -> bool:
 
-        required_fields = ['nombre', 'direccion']
+        required_fields = ['nombre', 'direccion', 'latitude', 'longitude']
 
         if not all(field in self.bodega_template for field in required_fields):
             return False
@@ -57,7 +57,9 @@ class CrearBodega(BaseCommand):
         nueva_bodega = Bodega(
             id=id_bodega,
             nombre=self.bodega_template['nombre'],
-            direccion=self.bodega_template['direccion']
+            direccion=self.bodega_template['direccion'],
+            latitude=self.bodega_template['latitude'],
+            longitude=self.bodega_template['longitude'],
         )
         db.session.add(nueva_bodega)
 
