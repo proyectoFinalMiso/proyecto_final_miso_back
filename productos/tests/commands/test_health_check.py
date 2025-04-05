@@ -10,6 +10,6 @@ class TestHealthCheck():
         
     def test_health_check(self):
         with app.test_client() as client:
-            response = client.get('/producto/ping')
+            response = client.get('/ping')
             assert response.status_code == 200
             assert response.json == {"message": "pong"}

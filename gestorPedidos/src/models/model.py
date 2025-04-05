@@ -18,7 +18,9 @@ class Pedido(db.Model):
     cliente = db.Column(db.String, nullable=False)
     vendedor = db.Column(db.String, nullable=False)
     fechaIngreso = db.Column(db.DateTime, nullable=False)
-    destino = db.Column(db.String, nullable=False)
+    direccion = db.Column(db.String, nullable=False)
+    latitud = db.Column(db.Float, nullable=False)
+    longitud = db.Column(db.Float, nullable=False)
     estado = db.Column(db.Enum(EstadoPedido), nullable=False)
     valorFactura = db.Column(db.Float, nullable=False)
 

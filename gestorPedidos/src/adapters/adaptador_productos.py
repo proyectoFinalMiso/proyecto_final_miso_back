@@ -19,7 +19,7 @@ class AdaptadorProductos(BaseHttpAdapter):
         try:
             response = self.session.post(url, json=data)
             response.raise_for_status()
-            producto = response.json()['body']
+            producto = response.json()['body'][0]
             return producto
         except RequestException:
             return False

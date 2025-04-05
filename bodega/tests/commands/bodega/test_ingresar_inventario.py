@@ -32,6 +32,8 @@ class TestIngresarInventario():
             request_body = {
                 'nombre': fake.name(),
                 'direccion': fake.name(),
+                'latitude': fake.latitude(),
+                'longitude': fake.longitude()
             }
             request_bodies.append(request_body)
 

@@ -11,6 +11,8 @@ class Bodega(db.Model):
     nombre = db.Column(db.String, nullable=False)
     posiciones = db.Column(JSON, nullable=True, default=list)
     direccion = db.Column(db.String, nullable=False)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
 
 class Posicion(db.Model):
     __tablename__ = 'posicion'

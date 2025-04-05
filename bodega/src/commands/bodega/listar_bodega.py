@@ -27,7 +27,9 @@ class ListarBodega(BaseCommand):
                 bodegas_list.append({
                     "id": bodega.id,
                     "nombre": bodega.nombre,
-                    "direccion": bodega.direccion
+                    "direccion": bodega.direccion,
+                    "latitude": bodega.latitude,
+                    "longitude": bodega.longitude,
                 })
 
             return {
