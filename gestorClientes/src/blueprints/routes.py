@@ -12,29 +12,29 @@ blueprint = Blueprint('gestorClientes', __name__)
 def health_check():
     return HealthCheck().execute()
 
-@blueprint.post('/cliente/crear')
+@blueprint.post('/crear')
 def crear_cliente():
     body = request.get_json()
     response = CrearCliente(body).execute()
     return jsonify(response['response']), response['status_code']
 
-@blueprint.post('/cliente/login')
+@blueprint.post('/login')
 def login():
     body = request.get_json()
     response = LoginCliente(body).execute()
     return jsonify(response['response']), response['status_code']
 
-@blueprint.get('/cliente/<cliente_id>')
+@blueprint.get('/<cliente_id>')
 def consultar_cliente(cliente_id):
     response = ConsultarCliente(cliente_id).execute()
     return jsonify(response['response']), response['status_code']
 
-@blueprint.get('/clientes')
+@blueprint.get('/')
 def listar_clientes():
     response = ListarClientes().execute()
     return jsonify(response['response']), response['status_code']
 
-@blueprint.post('/cliente/<cliente_id>/asignar_vendedor/<vendedor_id>')
+@blueprint.post('/<cliente_id>/asignar_vendedor/<vendedor_id>')
 def asignar_vendedor(cliente_id, vendedor_id):
     response = AsignarVendedor(cliente_id, vendedor_id).execute()
     return jsonify(response['response']), response['status_code'] 
