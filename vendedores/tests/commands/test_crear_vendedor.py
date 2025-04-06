@@ -29,10 +29,6 @@ class TestCrearVendedor():
 
     def test_crear_vendedor(self, gen_request):
         with app.test_client() as client:
-<<<<<<< HEAD
-            print(gen_request[0])
-=======
->>>>>>> 9e49ea99e398fb4143b761bfc1e41a271bc5c930
             response = client.post('/crear_vendedor', json=gen_request[0])
             assert response.status_code == 201
             assert response.json == {"msg": "Vendedor creado con exito"}

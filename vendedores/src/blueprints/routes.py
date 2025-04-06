@@ -16,8 +16,7 @@ def crear_vendedor():
     return jsonify(response['response']), response['status_code']
 
 
-@blueprint.get('/obtener_vendedor')
-def obtener_vendedor():
-    body = request.get_json()
-    response = ObtenerVendedor(body).execute()
+@blueprint.get('/obtener_vendedor/<vendedor_id>')
+def obtener_vendedor(vendedor_id):
+    response = ObtenerVendedor(vendedor_id).execute()
     return jsonify(response['response']), response['status_code']
