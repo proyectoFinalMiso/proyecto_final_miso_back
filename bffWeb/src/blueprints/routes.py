@@ -7,20 +7,25 @@ blueprint = Blueprint('bffWeb', __name__)
 MS_PRODUCTOS_URL = rf"{getenv('MS_PRODUCTOS_URL')}"
 MS_PEDIDOS_URL = rf"{getenv('MS_PEDIDOS_URL')}"
 MS_VENDEDOR_URL = rf"{getenv('MS_VENDEDOR_URL')}"
+MS_GESTOR_CLIENTES_URL = rf"{getenv('MS_GESTOR_CLIENTES_URL')}"
 
 def handle_requests(host, path):
     url = f"{host}/{path}"
-    headers = {key: value for key, value in request.headers if key != "Host"}
+    headers = {key: value for key, value in request.headers if key != ["Host"]}
 
     if request.method != "GET":
-        
+
         if request.content_type and request.content_type.startswith('multipart/form-data'):
+            headers.pop("Content-Type", None)
+            files = {key: (file.filename, file.stream, file.mimetype) for key, file in request.files.items()}
+            data = request.form.to_dict()
+
             response = requests.request(
                 method=request.method,
                 url=url,
                 headers=headers,
-                data=request.get_data(),
-                files=request.files
+                data=data,
+                files=files
             )
         else:
             response = requests.request(
