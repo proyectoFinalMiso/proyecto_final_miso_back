@@ -39,7 +39,7 @@ def proxy_ms_pedidos(path=None):
     response = handle_requests(MS_PEDIDOS_URL, path)
     return jsonify(response.json()), response.status_code
 
-@blueprint.route("api/vendedor/<path:path>", methods=["GET", "POST"])
+@blueprint.route("/api/vendedor/<path:path>", methods=["GET", "POST"])
 def proxy_ms_vendedores(path=None):
     response = handle_requests(MS_VENDEDOR_URL, path)
     return jsonify(response.json()), response.status_code
