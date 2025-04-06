@@ -50,7 +50,7 @@ if __name__ == '__main__':
             print(db_url)
             
             config_app(db_url)
-            serve(app, host="0.0.0.0", port=APP_PORT, threads=2)
+            serve(app, host="0.0.0.0", port=3006, threads=2)
             print('bad command')
 
     except IndexError:

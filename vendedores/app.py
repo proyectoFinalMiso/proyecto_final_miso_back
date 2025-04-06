@@ -39,7 +39,6 @@ if __name__ == '__main__':
         else:
             load_dotenv(".env.production")
 
-            APP_PORT=int(os.environ.get("SELLER_PORT"))
             DB_USER = os.environ.get('DB_USER')
             DB_PASSWORD = os.environ.get('DB_PASSWORD')
             DB_HOST = os.environ.get('DB_HOST')
@@ -51,7 +50,7 @@ if __name__ == '__main__':
             print(db_url)
             
             config_app(db_url)
-            serve(app, host="0.0.0.0", port=APP_PORT, threads=2)
+            serve(app, host="0.0.0.0", port=3005, threads=2)
             # print('bad command')
 
     except IndexError:
