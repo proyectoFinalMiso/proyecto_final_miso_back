@@ -63,20 +63,20 @@ class TestCrearProducto():
     def test_crear_producto(self, gen_request_producto, gen_request_bodega, gen_request_posicion):
         with app.test_client() as client:
 
-            response_bodega = client.post('/bodega/crear_bodega', json=gen_request_bodega[0])
+            response_bodega = client.post('/crear_bodega', json=gen_request_bodega[0])
             id_bodega = response_bodega.json['bodega']['id']
 
             request_nody_crear_posicion = gen_request_posicion[0]
             request_nody_crear_posicion['bodega'] = id_bodega
 
-            response_posicion = client.post('/posicion/crear_posicion', json=request_nody_crear_posicion)
+            response_posicion = client.post('/crear_posicion', json=request_nody_crear_posicion)
             id_posicion = response_posicion.json["id"]
 
             request_body = gen_request_producto[0]
             request_body['bodega'] = id_bodega
             request_body['posicion'] = id_posicion
 
-            response_producto = client.post('/inventario/crear_producto', json=request_body)
+            response_producto = client.post('/stock_crear_producto', json=request_body)
             assert response_producto.status_code == 201
             assert response_producto.json["msg"] == "Producto creado correctamente"
 

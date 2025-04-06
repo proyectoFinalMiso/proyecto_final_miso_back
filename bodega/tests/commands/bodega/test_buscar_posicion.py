@@ -46,15 +46,15 @@ class TestBuscarPosicion():
     def test_buscar_posicion(self, gen_request_posicion, gen_request_bodega):
         with app.test_client() as client:
 
-            response_bodega = client.post('/bodega/crear_bodega', json=gen_request_bodega[0])
+            response_bodega = client.post('/crear_bodega', json=gen_request_bodega[0])
             id_bodega = response_bodega.json['bodega']['id']
 
             request_body = gen_request_posicion[0]
             request_body['bodega'] = id_bodega
 
-            response_posicion = client.post('/posicion/crear_posicion', json=request_body)
+            response_posicion = client.post('/crear_posicion', json=request_body)
 
             id_posicion = response_posicion.json['id']
 
-            response_buscar_posicion = client.get('/posicion/buscar_posicion', json={"id_posicion": id_posicion})
+            response_buscar_posicion = client.get('/buscar_posicion', json={"id_posicion": id_posicion})
             assert response_buscar_posicion.status_code == 200

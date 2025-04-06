@@ -8,6 +8,7 @@ MS_PRODUCTOS_URL = rf"{getenv('MS_PRODUCTOS_URL')}"
 MS_PEDIDOS_URL = rf"{getenv('MS_PEDIDOS_URL')}"
 MS_VENDEDOR_URL = rf"{getenv('MS_VENDEDOR_URL')}"
 MS_GESTOR_CLIENTES_URL = rf"{getenv('MS_GESTOR_CLIENTES_URL')}"
+MS_BODEGA_URL = rf"{getenv('MS_BODEGA_URL')}"
 
 def handle_requests(host, path):
     url = f"{host}/{path}"
@@ -60,4 +61,9 @@ def proxy_ms_pedidos(path=None):
 @blueprint.route("/api/vendedor/<path:path>", methods=["GET", "POST"])
 def proxy_ms_vendedores(path=None):
     response = handle_requests(MS_VENDEDOR_URL, path)
+    return jsonify(response.json()), response.status_code
+
+@blueprint.route("/api/bodega/<path:path>", methods=["GET", "POST", "PUT"])
+def proxy_ms_vendedores(path=None):
+    response = handle_requests(MS_BODEGA_URL, path)
     return jsonify(response.json()), response.status_code

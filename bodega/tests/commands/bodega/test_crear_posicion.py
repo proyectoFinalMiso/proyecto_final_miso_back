@@ -45,12 +45,12 @@ class TestCrearPosicion():
     def test_crear_posicion(self, gen_request_posicion, gen_request_bodega):
         with app.test_client() as client:
 
-            response_bodega = client.post('/bodega/crear_bodega', json=gen_request_bodega[0])
+            response_bodega = client.post('/crear_bodega', json=gen_request_bodega[0])
             id_bodega = response_bodega.json['bodega']['id']
 
             request_body = gen_request_posicion[0]
             request_body['bodega'] = id_bodega
 
-            response_posicion = client.post('/posicion/crear_posicion', json=request_body)
+            response_posicion = client.post('/crear_posicion', json=request_body)
             assert response_posicion.status_code == 201
             assert response_posicion.json["msg"] == "Posicion creada correctamente"
