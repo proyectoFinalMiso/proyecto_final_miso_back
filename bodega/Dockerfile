@@ -14,5 +14,8 @@ RUN pip install --no-cache-dir pipenv && \
 # Copiar el resto de los archivos de tu aplicación
 COPY . /app
 
+# Exponer el puerto que utiliza tu aplicación (ajusta según sea necesario)
+EXPOSE 3006
+
 # Comando para ejecutar la aplicación
 CMD ["pipenv", "run", "python", "app.py", "production"]
