@@ -33,9 +33,9 @@ class TestListarBodega():
     def test_listar_bodega(self, gen_request):
         with app.test_client() as client:
             # Primero creamos una bodega para luego listar
-            response_bodega = client.post('/bodega/crear_bodega', json=gen_request[0])
+            response_bodega = client.post('/crear_bodega', json=gen_request[0])
             assert response_bodega.status_code == 201
             # Luego listamos las bodegas
-            response_listar_bodega = client.get('/bodega/listar_bodegas')
+            response_listar_bodega = client.get('/listar_bodegas')
             assert response_listar_bodega.status_code == 200
             assert len(response_listar_bodega.json) > 0

@@ -46,13 +46,13 @@ class TestListarPosicion():
 
         with app.test_client() as client:
 
-            response_bodega = client.post('/bodega/crear_bodega', json=gen_request_bodega[0])
+            response_bodega = client.post('/crear_bodega', json=gen_request_bodega[0])
             id_bodega = response_bodega.json['bodega']['id']
 
             request_body = gen_request_posicion[0]
 
-            response_posicion = client.post('/posicion/crear_posicion', json=request_body)
+            response_posicion = client.post('/crear_posicion', json=request_body)
 
-            response_listar_posicion = client.get('/posicion/listar_posiciones')
+            response_listar_posicion = client.get('/listar_posiciones')
             assert response_listar_posicion.status_code == 200
 
