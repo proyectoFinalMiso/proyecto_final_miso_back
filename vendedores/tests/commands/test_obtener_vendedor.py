@@ -15,9 +15,10 @@ class TestObtenerVendedor():
         request_bodies = []
 
         for i in range(10):
+            nombre_random = fake.name()
             request_body = {
-                'nombre': fake.name(),
-                'email': fake.email()
+                'nombre': nombre_random,
+                'email': f'{nombre_random.replace(" ", "")}@ccp.com'
             }
             request_bodies.append(request_body)
 
@@ -29,8 +30,8 @@ class TestObtenerVendedor():
 
     def test_obtener_vendedor(self, gen_request):
         with app.test_client() as client:
-            create_user = client.post('/vendedor/crear_vendedor', json=gen_request[0])
-            response = client.get('/vendedor/obtener_vendedor', json={'email': gen_request[0]['email']})
+            create_user = client.post('/crear_vendedor', json=gen_request[0])
+            response = client.get('/obtener_vendedor', json={'email': gen_request[0]['email']})
             assert response.status_code == 200
             assert response.json['email'] == gen_request[0]['email']
             assert response.json['nombre'] == gen_request[0]['nombre']

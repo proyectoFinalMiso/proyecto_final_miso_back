@@ -14,9 +14,10 @@ class TestCrearVendedor():
         request_bodies = []
 
         for i in range(10):
+            nombre_random = fake.name()
             request_body = {
-                'nombre': fake.name(),
-                'email': fake.email()
+                'nombre': nombre_random,
+                'email': f'{nombre_random.replace(" ", "")}@ccp.com'
             }
             request_bodies.append(request_body)
 
@@ -28,6 +29,7 @@ class TestCrearVendedor():
 
     def test_crear_vendedor(self, gen_request):
         with app.test_client() as client:
-            response = client.post('/vendedor/crear_vendedor', json=gen_request[0])
+            print(gen_request[0])
+            response = client.post('/crear_vendedor', json=gen_request[0])
             assert response.status_code == 201
             assert response.json == {"msg": "Vendedor creado con exito"}
