@@ -1,9 +1,10 @@
 name: Pull Request Validation
 
 on:
+  push:
+    branches: [develop]
   pull_request:
-    branches:
-      - main
+    branches: [main, develop]
 
 jobs:
   # test-gestorPedidos:
@@ -57,39 +58,36 @@ jobs:
       working-directory: ./vendedores
       run: pipenv run pytest --cov=src --cov-fail-under=70
 
-  # test-bodega:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: Install pipenv for bodega
-  #     working-directory: ./bodega
-  #     run: pip install pipenv
-  #   - name: Install dependencies for bodega
-  #     working-directory: ./bodega
-  #     run: pipenv install
-  #   - name: Synchronize .lock file
-  #     working-directory: ./bodega
-  #     run: pipenv sync
-  #   - name: Run unit tests for bodega
-  #     working-directory: ./bodega
-  #     run: pipenv run pytest --cov=src --cov-fail-under=70
+  test-bodega:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install pipenv for bodega
+      working-directory: ./bodega
+      run: pip install pipenv
+    - name: Install dependencies for bodega
+      working-directory: ./bodega
+      run: pipenv install
+    - name: Synchronize .lock file
+      working-directory: ./bodega
+      run: pipenv sync
+    - name: Run unit tests for bodega
+      working-directory: ./bodega
+      run: pipenv run pytest --cov=src --cov-fail-under=70
 
-  # test-gestorClientes:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: Install pipenv for gestorClientes
-  #     working-directory: ./gestorClientes
-  #     run: pip install pipenv
-  #   - name: Install dependencies for gestorClientes
-  #     working-directory: ./gestorClientes
-  #     run: pipenv install
-  #   - name: Synchronize .lock file
-  #     working-directory: ./gestorClientes
-  #     run: pipenv sync
-  #   - name: Run unit tests for gestorClientes
-  #     working-directory: ./gestorClientes
-  #     run: pipenv run pytest --cov=src --cov-fail-under=70
-
-  
-    
+  test-gestorClientes:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install pipenv for gestorClientes
+      working-directory: ./gestorClientes
+      run: pip install pipenv
+    - name: Install dependencies for gestorClientes
+      working-directory: ./gestorClientes
+      run: pipenv install
+    - name: Synchronize .lock file
+      working-directory: ./gestorClientes
+      run: pipenv sync
+    - name: Run unit tests for gestorClientes
+      working-directory: ./gestorClientes
+      run: pipenv run pytest --cov=src --cov-fail-under=70

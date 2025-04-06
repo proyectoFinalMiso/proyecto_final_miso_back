@@ -47,6 +47,7 @@ class CrearProducto(BaseCommand):
             self.producto_template.get("id_fabricante")
             and self.producto_template.get("nombre")
             and self.producto_template.get("valorUnitario")
+            and self.producto_template.get("volumen")
         ):
             return True
         else:
@@ -76,6 +77,7 @@ class CrearProducto(BaseCommand):
             fabricante=self.producto_template["id_fabricante"],
             nombre=self.producto_template["nombre"],
             valorUnitario=self.producto_template["valorUnitario"],
+            volumen=self.producto_template["volumen"]
         )
 
         db.session.add(nuevo_producto)

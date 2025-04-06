@@ -17,7 +17,9 @@ class CrearPedido(BaseCommand):
         required_fields = [
             "cliente",
             "vendedor",
-            "destino",
+            "direccion",
+            "latitud",
+            "longitud",
         ]
 
         if not all(field in self.body for field in required_fields):
@@ -51,15 +53,16 @@ class CrearPedido(BaseCommand):
             packingList=packing_list['listID'],
             cliente=self.body['cliente'],
             vendedor=self.body['vendedor'],
-            destino=self.body['destino'],
+            destino=self.body['direccion'],
+            latitud=self.body['latitud'],
+            longitud=self.body['longitud'],
             fechaIngreso=datetime.now(),
             estado=EstadoPedido.SOLICITADO.value,
             valorFactura=packing_list['valorFactura']
         )
         db.session.add(nuevo_pedido)
 
-        try:
-            
+        try:            
             db.session.commit()
             return {
                 "response": {

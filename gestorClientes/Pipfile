@@ -17,8 +17,10 @@ flask-cors = "*"
 waitress = "*"
 pg8000 = "*"
 python-dotenv = "*"
+flask-bcrypt = "*"
+werkzeug = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.12" 
+python_version = "3.12"

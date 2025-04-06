@@ -9,3 +9,4 @@ class Cliente(db.Model):
     nombre = db.Column(db.String, nullable=False)
     correo = db.Column(db.String, nullable=False)
     vendedorAsociado = db.Column(db.String, nullable=True) 
+    contrasena = db.Column(db.String, nullable=False)

@@ -5,7 +5,7 @@ from src.models.model import db
 
 @pytest.fixture(autouse=True, scope="session")
 def flask_app():
-    db_url = f"sqlite:///microservice_test.db"
+    db_url = "sqlite:///microservice_test.db"
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url
     app.config["TESTING"] = True
     with app.app_context():

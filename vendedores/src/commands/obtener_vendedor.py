@@ -6,20 +6,11 @@ from src.models.model import db, Vendedor
 
 class ObtenerVendedor(BaseCommand):
 
-    def __init__(self, request_body: dict):
-        self.vendedor_template = request_body
-
-    def check_campos_requeridos(self) -> bool:
-        if self.vendedor_template.get('email'):
-            return True
-        else:
-            return False
+    def __init__(self, vendedor_id: str):
+        self.vendedor_id = vendedor_id
         
-    def verificar_vendedor_existe(self) -> bool:
-
-        vendedor_query = Vendedor.query.filter(
-            Vendedor.email == self.vendedor_template['email']
-        ).first()
+    def verificar_vendedor_existe(self):
+        vendedor_query = Vendedor.query.filter_by(id=self.vendedor_id).first()
 
         if vendedor_query:
             return vendedor_query
@@ -27,21 +18,12 @@ class ObtenerVendedor(BaseCommand):
             return False
         
     def execute(self):
-
-        if not self.check_campos_requeridos():
-            return {
-                "response": {
-                    "msg": "Campos requeridos no cumplidos"
-                },
-                "status_code": 400
-            }
-        
         info_vendedor = self.verificar_vendedor_existe()
 
         if not info_vendedor:
             return {
                 "response": {
-                    "id": "Vendedor no existe"
+                    "msg": "Vendedor no existe"
                 },
                 "status_code": 404
             }
