@@ -64,6 +64,6 @@ def proxy_ms_vendedores(path=None):
     return jsonify(response.json()), response.status_code
 
 @blueprint.route("/api/bodega/<path:path>", methods=["GET", "POST", "PUT"])
-def proxy_ms_vendedores(path=None):
+def proxy_ms_bodegas(path=None):
     response = handle_requests(MS_BODEGA_URL, path)
     return jsonify(response.json()), response.status_code
