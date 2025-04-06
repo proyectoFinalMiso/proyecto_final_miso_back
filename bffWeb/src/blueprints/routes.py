@@ -10,18 +10,31 @@ MS_VENDEDOR_URL = rf"{getenv('MS_VENDEDOR_URL')}"
 
 def handle_requests(host, path):
     url = f"{host}/{path}"
+    headers = {key: value for key, value in request.headers if key != "Host"}
+
     if request.method != "GET":
-        response = requests.request(
-            method=request.method,
-            url=url,
-            headers={key: value for key, value in request.headers if key != "Host"},
-            json=request.get_json(),
-        )
+        
+        if request.content_type and request.content_type.startswith('multipart/form-data'):
+            response = requests.request(
+                method=request.method,
+                url=url,
+                headers=headers,
+                data=request.get_data(),
+                files=request.files
+            )
+        else:
+            response = requests.request(
+                method=request.method,
+                url=url,
+                headers=headers,
+                json=request.get_json(),
+            )
         return response
+    
     response = requests.request(
             method=request.method,
             url=url,
-            headers={key: value for key, value in request.headers if key != "Host"},
+            headers=headers
         )
     return response
 
