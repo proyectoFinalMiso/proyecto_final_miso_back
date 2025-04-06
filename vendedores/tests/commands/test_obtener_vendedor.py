@@ -17,9 +17,10 @@ class TestObtenerVendedor():
         request_bodies = []
 
         for i in range(10):
+            nombre_random = fake.name()
             request_body = {
-                'nombre': fake.name(),
-                'email': fake.email()
+                'nombre': nombre_random,
+                'email': f'{nombre_random.replace(" ", "")}@ccp.com'
             }
             request_bodies.append(request_body)
 
@@ -47,7 +48,7 @@ class TestObtenerVendedor():
             vendedor_mock = type('', (), {})()
             vendedor_mock.id = vendedor_id
             vendedor_mock.nombre = "Test Name"
-            vendedor_mock.email = "test@email.com"
+            vendedor_mock.email = "test@ccp.com"
             monkeypatch.setattr(command, 'verificar_vendedor_existe', lambda: vendedor_mock)
             
             # Act
@@ -57,7 +58,7 @@ class TestObtenerVendedor():
             assert result["status_code"] == 200
             assert result["response"]["id"] == vendedor_id
             assert result["response"]["nombre"] == "Test Name"
-            assert result["response"]["email"] == "test@email.com"
+            assert result["response"]["email"] == "test@ccp.com"
         else:
             monkeypatch.setattr(command, 'verificar_vendedor_existe', lambda: False)
             
@@ -71,13 +72,13 @@ class TestObtenerVendedor():
     def test_integration_obtener_vendedor(self, gen_request):
         with app.test_client() as client:
             # Crear un vendedor primero
-            response_create = client.post('/crear_vendedor', json=gen_request[0])
+            response_create = client.post('/crear_vendedor', json=gen_request[1])
             create_data = json.loads(response_create.data)
             assert "msg" in create_data
             assert response_create.status_code == 201
             
             # Obtener el ID del vendedor desde la base de datos
-            vendedor = Vendedor.query.filter_by(email=gen_request[0]['email']).first()
+            vendedor = Vendedor.query.filter_by(email=gen_request[1]['email']).first()
             assert vendedor is not None
             
             # Obtener el vendedor creado usando su ID
@@ -87,6 +88,6 @@ class TestObtenerVendedor():
             assert response_get.status_code == 200
             data = json.loads(response_get.data)
             assert data["id"] == vendedor.id
-            assert data["nombre"] == gen_request[0]["nombre"]
-            assert data["email"] == gen_request[0]["email"]
+            assert data["nombre"] == gen_request[1]["nombre"]
+            assert data["email"] == gen_request[1]["email"]
             

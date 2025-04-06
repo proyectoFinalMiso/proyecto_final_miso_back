@@ -14,9 +14,10 @@ class TestCrearVendedor():
         request_bodies = []
 
         for i in range(10):
+            nombre_random = fake.name()
             request_body = {
-                'nombre': fake.name(),
-                'email': fake.email()
+                'nombre': nombre_random,
+                'email': f'{nombre_random.replace(" ", "")}@ccp.com'
             }
             request_bodies.append(request_body)
 
