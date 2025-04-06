@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
 from sys import argv
@@ -5,6 +6,7 @@ from waitress import serve
 
 from src.blueprints.routes import blueprint
 
+load_dotenv('.env')
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 app.register_blueprint(blueprint)
