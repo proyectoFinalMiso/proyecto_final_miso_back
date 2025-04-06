@@ -32,7 +32,7 @@ class CrearVendedor(BaseCommand):
         
     def verificar_email_valido(self) -> bool:
         
-        patron_email = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+        patron_email = r'^[\w\.-]+@ccp.com'
 
         if re.match(patron_email, self.vendedor_template['email']):
             return True
@@ -84,6 +84,7 @@ class CrearVendedor(BaseCommand):
                 "status_code": 201
             }
         except Exception as e:
+            print(e)
             db.session.rollback()
             return {
                 "response": {

@@ -29,7 +29,7 @@ def crear_producto():
 
 @blueprint.post('/crear_producto/masivo')
 def crear_producto_masivo():
-    if 'archivo' not in request.files:
+    if 'file' not in request.files:
         return jsonify({"response": {"msg": "Ha ocurrido un error al procesar el archivo"}}), 500
     
     archivo = request.files['file']
