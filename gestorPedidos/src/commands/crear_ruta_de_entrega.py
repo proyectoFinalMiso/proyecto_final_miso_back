@@ -147,7 +147,7 @@ class CrearRutaDeEntrega(BaseCommand):
                     f"No hay stock suficiente para el producto: {producto_a_enviar}"
                 )
 
-        coordenadas = [[c["latitude"], c["longitude"], c["nombre"]]
+        coordenadas = [[c["latitude"], c["longitude"],  c["nombre"],  c["direccion"]]
                        for c in ruta]
 
         distancias = self.calcular_distancias(coordenadas)
