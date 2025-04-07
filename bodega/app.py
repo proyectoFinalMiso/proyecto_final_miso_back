@@ -19,31 +19,38 @@ def config_app(db_url):
         db.init_app(app)
         db.create_all()
 
-if __name__ == '__main__':
-    if argv[1] == "dev":
-        load_dotenv(".env.test")
+if __name__ == "__main__":
+    try:
+        if argv[1] == "dev":
+            load_dotenv(".env.test")
 
-        DB_USER = os.environ.get('DB_USER')
-        DB_PASSWORD = os.environ.get('DB_PASSWORD')
-        DB_HOST = os.environ.get('DB_HOST')
-        DB_PORT = os.environ.get('DB_PORT')
-        DB_NAME = os.environ.get('DB_NAME')
+            DB_USER = os.environ.get("DB_USER")
+            DB_PWD = os.environ.get("DB_PWD")
+            DB_HOST = os.environ.get("DB_HOST")
+            DB_PORT = os.environ.get("DB_PORT")
+            DB_NAME = os.environ.get("DB_NAME")
 
-        db_url = f"postgresql+pg8000://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-        config_app(db_url)
-        app.run(host="0.0.0.0", port=3006, debug=True)
+            db_url = f"postgresql+pg8000://{DB_USER}:{DB_PWD}@{DB_HOST}/{DB_NAME}"
+            config_app(db_url)
+            app.run(host="0.0.0.0", port=3006, debug=True)
 
-    else:
+        else:
+            load_dotenv(".env.production")
+
+            DB_USER = os.environ.get("DB_USER")
+            DB_PWD = os.environ.get("DB_PWD")
+            DB_HOST = os.environ.get("DB_HOST")
+            DB_PORT = os.environ.get("DB_PORT")
+            DB_NAME = os.environ.get("DB_NAME")
+
+            db_url = f"postgresql+pg8000://{DB_USER}:{DB_PWD}@{DB_HOST}/{DB_NAME}"
+
+            print(db_url)
+
+            config_app(db_url)
+            serve(app, host="0.0.0.0", port=3006, threads=2)
+            print("bad command")
+
+    except IndexError:
         load_dotenv(".env.production")
-        DB_USER = os.environ.get('DB_USER')
-        DB_PASSWORD = os.environ.get('DB_PASSWORD')
-        DB_HOST = os.environ.get('DB_HOST')
-        DB_PORT = os.environ.get('DB_PORT')
-        DB_NAME = os.environ.get('DB_NAME')
-        
-        db_url = f"postgresql+pg8000://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-
-        print(db_url)
-        
-        config_app(db_url)
         serve(app, host="0.0.0.0", port=3006, threads=2)
