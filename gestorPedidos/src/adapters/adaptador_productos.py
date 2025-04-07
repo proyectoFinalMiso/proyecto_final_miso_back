@@ -5,7 +5,7 @@ from src.adapters.base_http_adapter import BaseHttpAdapter
 class AdaptadorProductos(BaseHttpAdapter):
     
     def comprobar_estado_servicio(self):
-        url = f"{self.url}/producto/ping"
+        url = f"{self.url}/ping"
         try:
             response = self.session.get(url)
             response.raise_for_status()
@@ -14,7 +14,7 @@ class AdaptadorProductos(BaseHttpAdapter):
             return False
     
     def confirmar_producto_existe(self, sku:str=None):
-        url = f"{self.url}/producto/buscar_producto"
+        url = f"{self.url}/buscar_producto"
         data = {'clave': sku}
         try:
             response = self.session.post(url, json=data)
