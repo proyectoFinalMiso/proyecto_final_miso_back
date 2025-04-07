@@ -12,4 +12,5 @@ def database_host():
     return DATABASE_URI
 
 
-PRODUCT_URL = "http://localhost:3001"
+PRODUCT_URL = getenv('PRODUCT_URL')
+STORE_URL = getenv('STORE_URL')
