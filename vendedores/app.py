@@ -27,31 +27,30 @@ if __name__ == '__main__':
             load_dotenv(".env.test")
 
             DB_USER = os.environ.get('DB_USER')
-            DB_PASSWORD = os.environ.get('DB_PASSWORD')
+            DB_PWD = os.environ.get('DB_PWD')
             DB_HOST = os.environ.get('DB_HOST')
             DB_PORT = os.environ.get('DB_PORT')
             DB_NAME = os.environ.get('DB_NAME')
             
-            db_url = f"postgresql+pg8000://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+            db_url = f'postgresql+pg8000://{DB_USER}:{DB_PWD}@{DB_HOST}/{DB_NAME}'
             config_app(db_url)
             app.run(host="0.0.0.0", port=3005, debug=True)
 
         else:
             load_dotenv(".env.production")
 
-            APP_PORT=int(os.environ.get("SELLER_PORT"))
             DB_USER = os.environ.get('DB_USER')
-            DB_PASSWORD = os.environ.get('DB_PASSWORD')
+            DB_PWD = os.environ.get('DB_PWD')
             DB_HOST = os.environ.get('DB_HOST')
             DB_PORT = os.environ.get('DB_PORT')
             DB_NAME = os.environ.get('DB_NAME')
             
-            db_url = f"postgresql+pg8000://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+            db_url = f'postgresql+pg8000://{DB_USER}:{DB_PWD}@{DB_HOST}/{DB_NAME}'
 
             print(db_url)
             
             config_app(db_url)
-            serve(app, host="0.0.0.0", port=APP_PORT, threads=2)
+            serve(app, host="0.0.0.0", port=3005, threads=2)
             # print('bad command')
 
     except IndexError:

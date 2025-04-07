@@ -9,7 +9,6 @@ class ListarFabricantes(BaseCommand):
 
     def execute(self):
         fabricantes = self.buscar_fabricantes()
-        print(fabricantes)
 
         if not fabricantes:
             return {

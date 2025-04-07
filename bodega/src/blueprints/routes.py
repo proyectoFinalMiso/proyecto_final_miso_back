@@ -14,63 +14,63 @@ from src.commands.inventario.listar_inventario import ListarInventarios
 
 blueprint = Blueprint('gestorPedidos', __name__)
 
-@blueprint.get('/bodega/ping')
+@blueprint.get('/ping')
 def health_check():
     return HealthCheck().execute()
 
-@blueprint.post('/bodega/crear_bodega')
+@blueprint.post('/crear_bodega')
 def crear_bodega():
     request_body = request.get_json()
     response = CrearBodega(request_body).execute()
     return jsonify(response['response']), response['status_code']
 
-@blueprint.get('/bodega/listar_bodegas')
+@blueprint.get('/listar_bodegas')
 def listar_bodega():
     response = ListarBodega().execute()
     return jsonify(response['response']), response['status_code']
 
-@blueprint.get('/bodega/buscador_bodega')
+@blueprint.get('/buscador_bodega')
 def buscar_bodega():
     request_body = request.get_json()
     response = BuscadorBodega(request_body).execute()
     return jsonify(response['response']), response['status_code']
 
-@blueprint.put('/bodega/eliminar_bodega')
+@blueprint.put('/eliminar_bodega')
 def eliminar_bodega():
     request_body = request.get_json()
     response = EliminarBodega(request_body).execute()
     return jsonify(response['response']), response['status_code']
 
-@blueprint.post('/posicion/crear_posicion')
+@blueprint.post('/crear_posicion')
 def crear_posicion():
     request_body = request.get_json()
     response = CrearPosicion(request_body).execute()
     return jsonify(response['response']), response['status_code']
 
-@blueprint.get('/posicion/listar_posiciones')
+@blueprint.get('/listar_posiciones')
 def listar_posiciones():
     response = ListarPosicion().execute()
     return jsonify(response['response']), response['status_code']
 
-@blueprint.get('/posicion/buscar_posicion')
+@blueprint.get('/buscar_posicion')
 def buscar_posicion():
     request_body = request.get_json()
     response = BuscarPosicion(request_body).execute()
     return jsonify(response['response']), response['status_code']
 
-@blueprint.post('/inventario/crear_producto')
+@blueprint.post('/stock_crear_producto')
 def crear_producto():
     request_body = request.get_json()
     response = CrearProducto(request_body).execute()
     return jsonify(response['response']), response['status_code']
 
-@blueprint.post('/inventario/ingresar_inventario')
+@blueprint.post('/stock_ingresar_inventario')
 def ingresar_inventario():
     request_body = request.get_json()
     response = IngresarInventario(request_body).execute()
     return jsonify(response['response']), response['status_code']
 
-@blueprint.get('/inventario/listar_inventarios')
+@blueprint.get('/stock_listar_inventarios')
 def listar_inventarios():
     response = ListarInventarios().execute()
     return jsonify(response['response']), response['status_code']

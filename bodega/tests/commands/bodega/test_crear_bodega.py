@@ -34,12 +34,12 @@ class TestCrearBodega():
             request_body = {
                 'nombre': gen_request[0]['nombre']
             }
-            response_bodega = client.post('/bodega/crear_bodega', json=request_body)
+            response_bodega = client.post('/crear_bodega', json=request_body)
             assert response_bodega.status_code == 400
             assert response_bodega.json == {"msg": "Campos requeridos no cumplidos"}
     
     def test_crear_bodega(self, gen_request):
         with app.test_client() as client:
-            response_bodega = client.post('/bodega/crear_bodega', json=gen_request[0])
+            response_bodega = client.post('/crear_bodega', json=gen_request[0])
             assert response_bodega.status_code == 201
             # assert response_bodega.json["msg"] == "Bodega creada con exito"

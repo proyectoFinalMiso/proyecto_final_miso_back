@@ -33,11 +33,11 @@ class TestEliminarBodega():
     def test_eliminar_bodega(self, gen_request):
         with app.test_client() as client:
             # Primero, creamos una bodega para eliminarla después
-            response_bodega = client.post('/bodega/crear_bodega', json=gen_request[0])
+            response_bodega = client.post('/crear_bodega', json=gen_request[0])
             assert response_bodega.status_code == 201
 
             # Ahora, eliminamos la bodega
             id_bodega = str(response_bodega.json["bodega"]["id"])
 
-            response_bodega = client.put('/bodega/eliminar_bodega', json={"id": id_bodega})
+            response_bodega = client.put('/eliminar_bodega', json={"id": id_bodega})
             assert response_bodega.status_code == 200

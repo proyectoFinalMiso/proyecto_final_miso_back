@@ -67,13 +67,13 @@ class TestListarInventarios():
 
     def test_listar_inventarios(self, gen_request, gen_request_bodega, gen_request_posicion):
         with app.test_client() as client:
-            response_bodega = client.post("/bodega/crear_bodega", json=gen_request_bodega[0])
+            response_bodega = client.post("/crear_bodega", json=gen_request_bodega[0])
             id_bodega = response_bodega.json['bodega']['id']
 
             request_body_crear_posicion = gen_request_posicion[0]   
             request_body_crear_posicion['bodega'] = id_bodega
 
-            response_posicion = client.post("/posicion/crear_posicion", json=request_body_crear_posicion)
+            response_posicion = client.post("/crear_posicion", json=request_body_crear_posicion)
             print(response_posicion.json)
             id_posicion = response_posicion.json["id"]
 
@@ -81,10 +81,10 @@ class TestListarInventarios():
             request_body['bodega'] = id_bodega
             request_body['posicion'] = id_posicion
 
-            response_inventario = client.post("/inventario/crear_producto", json=request_body)
+            response_inventario = client.post("/stock_crear_producto", json=request_body)
             assert response_inventario.status_code == 201
 
             # Luego listamos los inventarios
-            response_listar_inventarios = client.get("/inventario/listar_inventarios")
+            response_listar_inventarios = client.get("/stock_listar_inventarios")
             assert response_listar_inventarios.status_code == 200
             assert len(response_listar_inventarios.json) > 0
