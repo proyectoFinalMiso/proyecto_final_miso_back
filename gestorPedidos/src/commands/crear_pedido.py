@@ -53,7 +53,7 @@ class CrearPedido(BaseCommand):
             packingList=packing_list['listID'],
             cliente=self.body['cliente'],
             vendedor=self.body['vendedor'],
-            destino=self.body['direccion'],
+            direccion=self.body['direccion'],
             latitud=self.body['latitud'],
             longitud=self.body['longitud'],
             fechaIngreso=datetime.now(),
