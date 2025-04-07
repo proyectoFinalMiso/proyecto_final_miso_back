@@ -12,7 +12,8 @@ MS_BODEGA_URL = rf"{getenv('MS_BODEGA_URL')}"
 
 def handle_requests(host, path):
     url = f"{host}/{path}"
-    headers = {key: value for key, value in request.headers if key != ["Host"]}
+    headers = {key: value for key, value in request.headers if key != "Host"}
+    print(headers)
 
     if request.method != "GET":
 
@@ -29,18 +30,16 @@ def handle_requests(host, path):
                 files=files
             )
         else:
-            response = requests.request(
-                method=request.method,
+            json = request.get_json()
+            response = requests.post(   
                 url=url,
-                headers=headers,
-                json=request.get_json(),
+                json=json,
             )
         return response
     
     response = requests.request(
             method=request.method,
             url=url,
-            headers=headers
         )
     return response
 

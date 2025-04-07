@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 from flask import Flask
-from flask_cors import CORS
 from sys import argv
 from waitress import serve
 
@@ -21,37 +20,30 @@ def config_app(db_url):
         db.create_all()
 
 if __name__ == '__main__':
-    try:
-        if argv[1] == "dev":
-            load_dotenv(".env.test")
+    if argv[1] == "dev":
+        load_dotenv(".env.test")
 
-            DB_USER = os.environ.get('DB_USER')
-            DB_PWD = os.environ.get('DB_PWD')
-            DB_HOST = os.environ.get('DB_HOST')
-            DB_PORT = os.environ.get('DB_PORT')
-            DB_NAME = os.environ.get('DB_NAME')
-            
-            db_url = f'postgresql+pg8000://{DB_USER}:{DB_PWD}@{DB_HOST}/{DB_NAME}'
-            config_app(db_url)
-            app.run(host="0.0.0.0", port=3006, debug=True)
+        DB_USER = os.environ.get('DB_USER')
+        DB_PASSWORD = os.environ.get('DB_PASSWORD')
+        DB_HOST = os.environ.get('DB_HOST')
+        DB_PORT = os.environ.get('DB_PORT')
+        DB_NAME = os.environ.get('DB_NAME')
 
-        else:
-            load_dotenv(".env.production")
+        db_url = f"postgresql+pg8000://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+        config_app(db_url)
+        app.run(host="0.0.0.0", port=3006, debug=True)
 
-            DB_USER = os.environ.get('DB_USER')
-            DB_PWD = os.environ.get('DB_PWD')
-            DB_HOST = os.environ.get('DB_HOST')
-            DB_PORT = os.environ.get('DB_PORT')
-            DB_NAME = os.environ.get('DB_NAME')
-            
-            db_url = f'postgresql+pg8000://{DB_USER}:{DB_PWD}@{DB_HOST}/{DB_NAME}'
-
-            print(db_url)
-            
-            config_app(db_url)
-            serve(app, host="0.0.0.0", port=3006, threads=2)
-            print('bad command')
-
-    except IndexError:
+    else:
         load_dotenv(".env.production")
+        DB_USER = os.environ.get('DB_USER')
+        DB_PASSWORD = os.environ.get('DB_PASSWORD')
+        DB_HOST = os.environ.get('DB_HOST')
+        DB_PORT = os.environ.get('DB_PORT')
+        DB_NAME = os.environ.get('DB_NAME')
+        
+        db_url = f"postgresql+pg8000://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+
+        print(db_url)
+        
+        config_app(db_url)
         serve(app, host="0.0.0.0", port=3006, threads=2)
