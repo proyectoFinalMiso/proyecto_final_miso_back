@@ -1,14 +1,17 @@
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Identity
 from enum import Enum
 
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Identity
+
 db = SQLAlchemy()
+
 
 class EstadoPedido(Enum):
     SOLICITADO = "SOLICITADO"
     EN_PROCESO = "EN_PROCESO"
     FINALIZADO = "FINALIZADO"
     CANCELADO = "CANCELADO"
+
 
 class Pedido(db.Model):
     __tablename__ = 'pedidos'
@@ -24,10 +27,20 @@ class Pedido(db.Model):
     estado = db.Column(db.Enum(EstadoPedido), nullable=False)
     valorFactura = db.Column(db.Float, nullable=False)
 
+
 class PackingList(db.Model):
     __tablename__ = 'packingLists'
-    id = db.Column(db.Integer, Identity(start=1, cycle=True), nullable=False, primary_key=True)
+    id = db.Column(db.Integer, Identity(start=1, cycle=True),
+                   nullable=False, primary_key=True)
     listID = db.Column(db.String)
     producto = db.Column(db.String, nullable=False)
     cantidad = db.Column(db.String, nullable=False)
     costoTotal = db.Column(db.Float, nullable=False)
+
+
+class RutaDeEntrega(db.Model):
+    __tablename__ = 'rutaDeEntrega'
+    id = db.Column(db.Integer, Identity(start=1, cycle=True),
+                   nullable=False, primary_key=True)
+    pedidoID = db.Column(db.String)
+    ruta = db.Column(db.String, nullable=False)
