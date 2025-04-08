@@ -64,7 +64,7 @@ class TestIngresarInventario():
 
         for i in range(10):
             request_body = {
-                'cantidad': fake.pyint(),
+                'cantidad': fake.pyint()+1,
             }
             request_bodies.append(request_body)
 
@@ -90,17 +90,19 @@ class TestIngresarInventario():
             request_nody_crear_posicion['bodega'] = id_bodega
 
             response_posicion = client.post('/crear_posicion', json=request_nody_crear_posicion)
-            id_posicion = response_posicion.json["id"]
+            id_posicion = response_posicion.json['posicion']["id"]
 
             request_body = gen_request_producto[0]
             request_body['bodega'] = id_bodega
             request_body['posicion'] = id_posicion
 
             response_producto = client.post('stock_crear_producto', json=request_body)
-            id_producto = response_producto.json['id']
+            lote = response_producto.json['producto']['lote']
+            sku = response_producto.json['producto']['sku']
 
             request_body_ingresar_inventario = gen_request_ingresar_inventario[0]
-            request_body_ingresar_inventario['id_producto'] = id_producto
+            request_body_ingresar_inventario['sku'] = sku
+            request_body_ingresar_inventario['lote'] = lote
 
             response_ingresar_inventario = client.post('/stock_ingresar_inventario', json=request_body_ingresar_inventario)
             assert response_ingresar_inventario.status_code == 200

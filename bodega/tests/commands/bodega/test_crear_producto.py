@@ -70,7 +70,7 @@ class TestCrearProducto():
             request_nody_crear_posicion['bodega'] = id_bodega
 
             response_posicion = client.post('/crear_posicion', json=request_nody_crear_posicion)
-            id_posicion = response_posicion.json["id"]
+            id_posicion = response_posicion.json['posicion']["id"]
 
             request_body = gen_request_producto[0]
             request_body['bodega'] = id_bodega

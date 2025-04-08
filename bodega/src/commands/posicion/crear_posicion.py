@@ -86,10 +86,13 @@ class CrearPosicion(BaseCommand):
 
             return {
                 "response": {
+                    "posicion": {
+                        "id": nueva_posicion.id,
+                        "bodega": nueva_posicion.bodega,
+                        "volumen": nueva_posicion.volumen
+                    },
                     "msg": "Posicion creada correctamente",
-                    "id": nueva_posicion.id,
-                    "bodega": nueva_posicion.bodega,
-                    "volumen": nueva_posicion.volumen
+                    
                 },
                 "status_code": 201
             }
