@@ -13,7 +13,6 @@ MS_BODEGA_URL = rf"{getenv('MS_BODEGA_URL')}"
 def handle_requests(host, path):
     url = f"{host}/{path}"
     headers = {key: value for key, value in request.headers if key != "Host"}
-    print(headers)
 
     if request.method != "GET":
 
