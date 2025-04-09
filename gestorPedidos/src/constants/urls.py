@@ -1,5 +1,6 @@
 from os import getenv
 
+
 # External routes
 def database_host():
     DB_HOST = getenv('DB_HOST')
@@ -9,3 +10,7 @@ def database_host():
 
     DATABASE_URI = f'postgresql+pg8000://{DB_USER}:{DB_PWD}@{DB_HOST}/{DB_NAME}'
     return DATABASE_URI
+
+
+PRODUCT_URL = getenv('PRODUCT_URL')
+STORE_URL = getenv('STORE_URL')
