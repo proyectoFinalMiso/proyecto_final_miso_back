@@ -85,13 +85,11 @@ class TestCrearProducto():
             response_fabricante = client.post('/crear_fabricante', json=gen_request_fabricante[2])
             assert response_fabricante.status_code == 201
 
-            print(response_fabricante.json)
-
             crear_producto_body = gen_request_producto[0]
             crear_producto_body['id_fabricante'] = response_fabricante.json['id']
             crear_producto_body.pop('nombre')
 
             response = client.post('/crear_producto', json=crear_producto_body)
-            print(response.json)
+            
             assert response.status_code == 400
             assert response.json == {"msg": "Campos requeridos no cumplidos"}

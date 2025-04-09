@@ -13,7 +13,7 @@ class IngresarInventario(BaseCommand):
     
     def check_campos_requeridos(self) -> bool:
 
-        required_fields = ['id_producto', 'cantidad']
+        required_fields = ['sku', 'lote', 'cantidad']
 
         if not all(field in self.inventario_template for field in required_fields):
             return False
@@ -25,7 +25,8 @@ class IngresarInventario(BaseCommand):
     
     def verificar_producto_existe(self) -> bool:
         existe_producto_query = Inventario.query.filter(
-            Inventario.id == self.inventario_template['id_producto']
+            Inventario.sku == self.inventario_template['sku'],
+            Inventario.lote == self.inventario_template['lote'],
         ).first()
         if existe_producto_query:
             return True
@@ -65,7 +66,9 @@ class IngresarInventario(BaseCommand):
             }
 
         try:
-            producto = Inventario.query.filter(Inventario.id == self.inventario_template['id_producto']).first()
+            producto = Inventario.query.filter(
+                Inventario.sku == self.inventario_template['sku'],
+                Inventario.lote == self.inventario_template['lote']).first()
             if producto:
                 producto.cantidadDisponible += self.inventario_template['cantidad']
                 db.session.commit()

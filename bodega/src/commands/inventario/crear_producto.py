@@ -128,16 +128,19 @@ class CrearProducto(BaseCommand):
 
             return {
                 "response": {
+                    "producto": {
+                        "id": nuevo_producto.id,
+                        "nombre": nuevo_producto.nombre,
+                        "valorUnitario": nuevo_producto.valorUnitario,
+                        "bodega": nuevo_producto.bodega,
+                        "posicion": nuevo_producto.posicion,
+                        "lote": nuevo_producto.lote,
+                        "cantidad": nuevo_producto.cantidadDisponible,
+                        "fechaIngreso": nuevo_producto.fechaIgreso,
+                        "sku": nuevo_producto.sku
+                    },
                     "msg": "Producto creado correctamente",
-                    "id": nuevo_producto.id,
-                    "nombre": nuevo_producto.nombre,
-                    "valorUnitario": nuevo_producto.valorUnitario,
-                    "bodega": nuevo_producto.bodega,
-                    "posicion": nuevo_producto.posicion,
-                    "lote": nuevo_producto.lote,
-                    "cantidad": nuevo_producto.cantidadDisponible,
-                    "fechaIngreso": nuevo_producto.fechaIgreso,
-                    "sku": nuevo_producto.sku
+                    
                 },
                 "status_code": 201
             }
