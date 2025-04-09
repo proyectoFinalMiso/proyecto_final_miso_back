@@ -75,7 +75,7 @@ class TestListarInventarios():
 
             response_posicion = client.post("/crear_posicion", json=request_body_crear_posicion)
             print(response_posicion.json)
-            id_posicion = response_posicion.json["id"]
+            id_posicion = response_posicion.json['posicion']["id"]
 
             request_body = gen_request[0]
             request_body['bodega'] = id_bodega

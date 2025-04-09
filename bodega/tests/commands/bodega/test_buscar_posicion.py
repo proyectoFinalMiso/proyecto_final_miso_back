@@ -54,7 +54,7 @@ class TestBuscarPosicion():
 
             response_posicion = client.post('/crear_posicion', json=request_body)
 
-            id_posicion = response_posicion.json['id']
+            id_posicion = response_posicion.json['posicion']['id']
 
             response_buscar_posicion = client.get('/buscar_posicion', json={"id_posicion": id_posicion})
             assert response_buscar_posicion.status_code == 200
