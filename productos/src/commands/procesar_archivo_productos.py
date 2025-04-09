@@ -33,7 +33,7 @@ class ProcesarArchivoProductos(BaseCommand):
                     "status_code": 400,
                 }
             
-            productos = df.to_dict(orient="records")
+            productos = {"response": {'payload': df.to_dict(orient="records")}, 'status_code': 200}
             return productos
         
         except Exception as e:

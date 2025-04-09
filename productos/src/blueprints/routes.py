@@ -34,9 +34,10 @@ def crear_producto_masivo():
     
     archivo = request.files['file']
     nombre_archivo = archivo.filename.lower()
-    productos = ProcesarArchivoProductos(archivo, nombre_archivo).execute()
-    if productos['status_code'] != 200:
-        return jsonify(productos['response']), productos['status_code']
+    productos_response = ProcesarArchivoProductos(archivo, nombre_archivo).execute()
+    if productos_response['status_code'] != 200:
+        return jsonify(productos_response['response']), productos_response['status_code']
+    productos = productos_response['response']['payload']
     response = CrearProductoMasivo(productos).execute()
     return jsonify(response['response']), response['status_code']
                        

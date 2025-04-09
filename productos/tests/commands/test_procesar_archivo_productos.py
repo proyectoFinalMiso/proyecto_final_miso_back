@@ -24,7 +24,9 @@ class TestProcesarArchivoProductos():
     def test_procesar_archivo_es_valido(self, archivo, nombre_archivo):
         with open(archivo, "rb") as f:
             procesador = ProcesarArchivoProductos(f, nombre_archivo)
-            resultado = procesador.execute()
+            response = procesador.execute()
+            assert response['status_code'] == 200
+            resultado = response['response']['payload']
             assert isinstance(resultado, list)
             assert len(resultado) > 0
             for producto in resultado:
