@@ -21,9 +21,9 @@ class TestCrearPackingList():
         producto_2 = productos[randint(0, len(productos) - 1)]['sku']
         producto_3 = productos[randint(0, len(productos) - 1)]['sku']
         lista_productos = [
-            {'sku': producto_1, 'cantidad': randint(1, 50)},
-            {'sku': producto_2, 'cantidad': randint(1, 50)},
-            {'sku': producto_3, 'cantidad': randint(1, 50)},
+            {'sku': producto_1, 'cantidad': 15},
+            {'sku': producto_2, 'cantidad': 23},
+            {'sku': producto_3, 'cantidad': 4},
         ]
 
         with app.test_client() as client:
@@ -39,3 +39,13 @@ class TestCrearPackingList():
                 assert packing_list
                 valor_calculado += packing_list.costoTotal
             assert valor_calculado == valor_factura
+    
+    def test_listado_productos_no_existe(self):
+        lista_productos = [
+            {'sku': 999999999, 'cantidad': randint(1, 50)},
+        ]
+
+        with app.test_client() as client:
+            response = client.post('/packingList/crear', json=lista_productos)
+            assert response.status_code == 400
+            assert response.json['msg'] == 'Hay productos que no existen en el sistema'
