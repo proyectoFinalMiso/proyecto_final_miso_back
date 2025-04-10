@@ -20,6 +20,7 @@ class CrearPedido(BaseCommand):
             "direccion",
             "latitud",
             "longitud",
+            "productos"
         ]
 
         if not all(field in self.body for field in required_fields):
