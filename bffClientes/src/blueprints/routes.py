@@ -6,6 +6,8 @@ blueprint = Blueprint('bffClientes', __name__)
 
 MS_GESTOR_CLIENTES_URL = rf"{getenv('MS_GESTOR_CLIENTES_URL')}"
 MS_PEDIDOS_URL = rf"{getenv('MS_PEDIDOS_URL')}"
+MS_GESTOR_VENDEDORES_URL = rf"{getenv('MS_GESTOR_VENDEDORES_URL')}"
+MS_GESTOR_STOCK_URL = rf"{getenv('MS_GESTOR_STOCK_URL')}"
 
 def handle_requests(host, path):
     url = f"{host}/{path}"
@@ -36,4 +38,14 @@ def proxy_ms_gestor_clientes(path=None):
 @blueprint.route("/api/gestorPedidos/<path:path>", methods=["GET", "POST"])
 def proxy_ms_pedidos(path=None):
     response = handle_requests(MS_PEDIDOS_URL, path)
+    return jsonify(response.json()), response.status_code
+
+@blueprint.route("/api/gestorVendedores/<path:path>", methods=["GET", "POST"])
+def proxy_ms_vendedores(path=None):
+    response = handle_requests(MS_GESTOR_VENDEDORES_URL, path)
+    return jsonify(response.json()), response.status_code
+
+@blueprint.route("/api/gestorStock/<path:path>", methods=["GET", "POST"])
+def proxy_ms_stock(path=None):
+    response = handle_requests(MS_GESTOR_STOCK_URL, path)
     return jsonify(response.json()), response.status_code
