@@ -1,5 +1,5 @@
 from src.commands.base_command import BaseCommand
-from src.models.model import db, Pedido
+from src.models.model import Pedido
 
 
 class ListarPedidos(BaseCommand):
@@ -34,8 +34,7 @@ class ListarPedidos(BaseCommand):
             return {"response": {"pedidos": pedidos_list}, "status_code": 200}
 
         except Exception as e:
-            # Opcional: Puedes registrar el error `e` para depuración
             return {
-                "response": {"msg": "Error al listar los pedidos"},
+                "response": {"msg": f"Error al listar los pedidos: {e}"},
                 "status_code": 500,
             }

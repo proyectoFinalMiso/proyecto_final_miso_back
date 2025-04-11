@@ -39,7 +39,7 @@ class ActualizarEstadoPedido(BaseCommand):
         try:
             db.session.add(pedido)
             db.session.commit()
-            return {'response': {'msg': 'El estado del pedido se actualizó correctamente', 'body': pedido}, 'status_code': 200}
+            return {'response': {'msg': 'El estado del pedido se actualizó correctamente', 'body': {'id': pedido.id, 'estado': pedido.estado.value}}, 'status_code': 200}
         except Exception as e:
             db.session.rollback()
             return {'response': {'msg': f'No se ha podido completar la actualización del estado: {e}'}, 'status_code': 500}

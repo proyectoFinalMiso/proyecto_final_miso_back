@@ -67,7 +67,7 @@ class CrearPedido(BaseCommand):
             db.session.commit()
             return {
                 "response": {
-                    "msg": "Pedido creado con exito"
+                    "msg": "Pedido creado con exito",
                 },
                 "status_code": 201
             }

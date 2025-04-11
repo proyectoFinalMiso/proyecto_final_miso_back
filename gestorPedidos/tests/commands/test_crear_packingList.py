@@ -1,4 +1,3 @@
-import pytest
 from app import app
 from os import getenv
 from random import randint
