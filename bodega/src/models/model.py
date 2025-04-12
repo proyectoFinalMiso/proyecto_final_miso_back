@@ -46,6 +46,22 @@ class Inventario(db.Model):
             'lote': self.lote,
             'cantidadDisponible': self.cantidadDisponible,
             'cantidadReservada': self.cantidadReservada,
-            'fechaIgreso': str(self.fechaIgreso),
+            'fechaIngreso': str(self.fechaIgreso),
             'sku': self.sku
         }
+    
+class NecesidadCompras(db.Model):
+    __tablename__ = 'necesidadCompras'
+
+    sku = db.Column(db.Integer, db.ForeignKey('inventario.sku'), primary_key=True)
+    cantidad = db.Column(db.Integer, nullable=False)
+    fechaActualizacion = db.Column(db.DateTime, nullable=True)
+    
+    def to_dict(self):
+        return {
+            'sku': self.sku,
+            'cantidad': self.cantidad,
+            'fechaActualizacion': str(self.fechaActualizacion)
+        }
+
+    

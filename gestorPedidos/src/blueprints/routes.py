@@ -4,6 +4,8 @@ from src.commands.crear_pedido import CrearPedido
 from src.commands.crear_ruta_de_entrega import CrearRutaDeEntrega
 from src.commands.health_check import HealthCheck
 from src.commands.listar_pedidos import ListarPedidos
+from src.commands.actualizar_estado_pedido import ActualizarEstadoPedido
+
 
 blueprint = Blueprint('gestorPedidos', __name__)
 
@@ -38,4 +40,10 @@ def crear_packing_list():
 def listar_pedidos():
     cliente_id = request.args.get('cliente_id')
     response = ListarPedidos(cliente_id).execute()
+    return jsonify(response['response']), response['status_code']
+
+@blueprint.patch('/pedido/actualizar_estado')
+def actualizar_estado_pedido():
+    body = request.get_json()
+    response = ActualizarEstadoPedido(body).execute()
     return jsonify(response['response']), response['status_code']

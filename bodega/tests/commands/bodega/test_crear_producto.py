@@ -1,5 +1,4 @@
 import pytest
-import json
 from faker import Faker
 from datetime import datetime
 
@@ -66,10 +65,10 @@ class TestCrearProducto():
             response_bodega = client.post('/crear_bodega', json=gen_request_bodega[0])
             id_bodega = response_bodega.json['bodega']['id']
 
-            request_nody_crear_posicion = gen_request_posicion[0]
-            request_nody_crear_posicion['bodega'] = id_bodega
+            request_body_crear_posicion = gen_request_posicion[0]
+            request_body_crear_posicion['bodega'] = id_bodega
 
-            response_posicion = client.post('/crear_posicion', json=request_nody_crear_posicion)
+            response_posicion = client.post('/crear_posicion', json=request_body_crear_posicion)
             id_posicion = response_posicion.json['posicion']["id"]
 
             request_body = gen_request_producto[0]
