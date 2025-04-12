@@ -3,9 +3,15 @@ from src.models.model import db, Cliente
 
 class ListarClientes(BaseCommand):
     
+    def __init__(self, vendedor_id: str = None):
+        self.vendedor_id = vendedor_id
+
     def execute(self):
         try:
-            clientes = Cliente.query.all()
+            if self.vendedor_id:
+                clientes = Cliente.query.filter_by(vendedorAsociado=self.vendedor_id).all()
+            else:
+                clientes = Cliente.query.all()
             
             clientes_list = []
             for cliente in clientes:
