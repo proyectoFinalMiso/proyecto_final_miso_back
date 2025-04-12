@@ -4,7 +4,9 @@ from src.models.model import db, Inventario, NecesidadCompras
 
 class ReservarInventario:
     """
-    Esta función se encarga de reservar el inventario
+    Esta función se encarga de reservar el inventario disponible en el inventario. La lógica es primero reservar los lotes por orden de antiguedad.
+    En caso de que la necesidad sea superior a la cantidad disponible, se almacena en una tabla secundaria para la visualización del equipo de
+    compras
     """
 
     def __init__(self, productos: list = None):
