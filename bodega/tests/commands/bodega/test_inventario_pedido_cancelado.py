@@ -5,7 +5,7 @@ from faker import Faker
 
 from src.models.model import Inventario, NecesidadCompras, db
 
-class TestReservarInventario():
+class TestInventarioPedidoCancelado():
 
     @pytest.fixture(scope='module')
     def gen_request_posicion(self):
@@ -54,24 +54,24 @@ class TestReservarInventario():
 
     def test_generar_reservas_inventario(self, gen_request_bodega, gen_request_posicion, gen_request_producto):
         producto_1 = gen_request_producto[0]
-        producto_1['sku'] = 10001
+        producto_1['sku'] = 10004
         producto_1['cantidad'] = 137
 
         producto_2 = gen_request_producto[1]
-        producto_2['sku'] = 10002
+        producto_2['sku'] = 10005
         producto_2['cantidad'] = 34
 
         producto_3 = gen_request_producto[2]
-        producto_3['sku'] = 10003
+        producto_3['sku'] = 10006
         producto_3['cantidad'] = 25
 
         productos = [producto_1, producto_2, producto_3]    
 
         productos_reservar = [
-                {"sku": 10001, "cantidad": 100},
-                {"sku": 10002, "cantidad": 56},
-                {"sku": 10003, "cantidad": 25}
-            ]    
+                {"sku": 10004, "cantidad": 100},
+                {"sku": 10005, "cantidad": 56},
+                {"sku": 10006, "cantidad": 25}
+            ]
 
         with app.test_client() as client:
             response_bodega = client.post('/crear_bodega', json=gen_request_bodega[0])
@@ -90,38 +90,53 @@ class TestReservarInventario():
                 response_producto = client.post('/stock_crear_producto', json=request_body)
                 assert response_producto.status_code == 201
             
-            producto_1_pre = db.session.query(Inventario).filter_by(sku=10001).first()
-            producto_2_pre = db.session.query(Inventario).filter_by(sku=10002).first()
-            producto_3_pre = db.session.query(Inventario).filter_by(sku=10003).first()
-
-            assert producto_1_pre.cantidadDisponible == 137
-            assert producto_2_pre.cantidadDisponible == 34
-            assert producto_3_pre.cantidadDisponible == 25
-            
             response_reserva = client.post('/stock_reservar_inventario', json=productos_reservar)
             assert response_reserva.status_code == 201
 
-            producto_1_post = db.session.query(Inventario).filter_by(sku=10001).first()
-            producto_2_post = db.session.query(Inventario).filter_by(sku=10002).first()
-            producto_3_post = db.session.query(Inventario).filter_by(sku=10003).first()
+            producto_1_pre = db.session.query(Inventario).filter_by(sku=10004).first()
+            producto_2_pre = db.session.query(Inventario).filter_by(sku=10005).first()
+            producto_3_pre = db.session.query(Inventario).filter_by(sku=10006).first()
 
-            producto_1_necesidad = db.session.query(NecesidadCompras).filter_by(sku = 10001).first()
-            producto_2_necesidad = db.session.query(NecesidadCompras).filter_by(sku = 10002).first()
-            producto_3_necesidad = db.session.query(NecesidadCompras).filter_by(sku = 10003).first()
+            producto_1_pre_necesidad = db.session.query(NecesidadCompras).filter_by(sku = 10004).first()
+            producto_2_pre_necesidad = db.session.query(NecesidadCompras).filter_by(sku = 10005).first()
+            producto_3_pre_necesidad = db.session.query(NecesidadCompras).filter_by(sku = 10006).first()
 
-            assert producto_1_post.cantidadDisponible == 37
-            assert producto_1_post.cantidadReservada == 100
-            assert not producto_1_necesidad
+            assert producto_1_pre.cantidadDisponible == 37
+            assert producto_1_pre.cantidadReservada == 100
+            assert not producto_1_pre_necesidad
 
-            assert producto_2_post.cantidadDisponible == 0
-            assert producto_2_post.cantidadReservada == 34
-            assert producto_2_necesidad.cantidad == 22
+            assert producto_2_pre.cantidadDisponible == 0
+            assert producto_2_pre.cantidadReservada == 34
+            assert producto_2_pre_necesidad.cantidad == 22
             
-            assert producto_3_post.cantidadDisponible == 0
-            assert producto_3_post.cantidadReservada == 25
-            assert not producto_3_necesidad
+            assert producto_3_pre.cantidadDisponible == 0
+            assert producto_3_pre.cantidadReservada == 25
+            assert not producto_3_pre_necesidad
+
+            response_reserva = client.post('/inventario_pedido_cancelado', json=productos_reservar)
+            assert response_reserva.status_code == 201
+
+            producto_1_post = db.session.query(Inventario).filter_by(sku=10004).first()
+            producto_2_post = db.session.query(Inventario).filter_by(sku=10005).first()
+            producto_3_post = db.session.query(Inventario).filter_by(sku=10006).first()
+
+            producto_1_post_necesidad = db.session.query(NecesidadCompras).filter_by(sku=10004).first()
+            producto_2_post_necesidad = db.session.query(NecesidadCompras).filter_by(sku=10005).first()
+            producto_3_post_necesidad = db.session.query(NecesidadCompras).filter_by(sku=10006).first()
+
+            assert producto_1_post.cantidadDisponible == 137
+            assert producto_1_post.cantidadReservada == 0
+            assert not producto_1_post_necesidad
+
+            assert producto_2_post.cantidadDisponible == 34
+            assert producto_2_post.cantidadReservada == 0
+            assert producto_2_post_necesidad.cantidad == 0
+            
+            assert producto_3_post.cantidadDisponible == 25
+            assert producto_3_post.cantidadReservada == 0
+            assert not producto_3_post_necesidad
     
-    def test_generar_reservas_inventario_campos_requeridos(self):
+    def test_campos_requeridos(self):
         productos_reservar = [
                 {"sku": 10001, "cantidad": 100},
                 {"sku": 10002, "cantidad": 56},
@@ -129,6 +144,6 @@ class TestReservarInventario():
             ]    
 
         with app.test_client() as client:
-            response_reserva = client.post('/stock_reservar_inventario', json=productos_reservar)
+            response_reserva = client.post('/inventario_pedido_cancelado', json=productos_reservar)
             assert response_reserva.status_code == 400
             assert response_reserva.json == {"msg": "Campos requeridos no cumplidos"}

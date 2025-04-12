@@ -45,22 +45,23 @@ class InventarioPedidoCancelado:
             )
 
             # Iniciar restando la necesidad
-            cantidad_retirar_necesidad = min(cantidad_necesidad, cantidad_reingresar)
+            cantidad_retirar_necesidad = min(cantidad_necesidad, cantidad_reingresar) # Cantidad a eliminar de la necesidad del SKU
             if cantidad_retirar_necesidad < cantidad_reingresar:
                 residual_retiro_necesidad = cantidad_reingresar - cantidad_retirar_necesidad
-                cantidad_retirar_reserva = min(cantidad_reingresar - cantidad_retirar_necesidad, cantidad_reservada)
-                if cantidad_retirar_reserva < residual_retiro_necesidad:
-                    cantidad_agregar_inventario = residual_retiro_necesidad - cantidad_retirar_reserva
-            lista_cantidades = {
-                'sku': producto['sku'],
-                'retirar_necesidad': cantidad_retirar_necesidad,
-                'retirar_reserva': cantidad_retirar_reserva,
-                'agregar_inventario': cantidad_agregar_inventario
-            }
-
+                cantidad_retirar_reserva = min(residual_retiro_necesidad, cantidad_reservada)
+                if residual_retiro_necesidad > 0:
+                    cantidad_agregar_inventario = residual_retiro_necesidad
+                
+            lista_cantidades.append(
+                {
+                    'sku': producto['sku'],
+                    'retirar_necesidad': cantidad_retirar_necesidad,
+                    'retirar_reserva': cantidad_retirar_reserva,
+                    'agregar_inventario': cantidad_agregar_inventario   
+                }
+            )
         return lista_cantidades
-                
-                
+                    
     def execute(self):        
         if not self.check_campos_requeridos():
             return {
@@ -69,7 +70,7 @@ class InventarioPedidoCancelado:
             }
         
         lista_reserva = self.calcular_reserva_y_necesidad()
-        
+
         for producto_reservado in lista_reserva:
             sku = producto_reservado['sku']
             retirar_necesidad = producto_reservado['retirar_necesidad']
@@ -77,8 +78,7 @@ class InventarioPedidoCancelado:
             agregar_inventario = producto_reservado['agregar_inventario']
 
             lotes_inventario = db.session.query(Inventario).filter(
-                Inventario.sku == sku,
-                Inventario.cantidadDisponible > 0).order_by(Inventario.fechaIgreso.asc()).all()
+                Inventario.sku == sku).order_by(Inventario.fechaIgreso.asc()).all()
             
             if retirar_necesidad > 0:
                 registro_necesidad = db.session.query(NecesidadCompras).filter(
@@ -86,16 +86,14 @@ class InventarioPedidoCancelado:
                 registro_necesidad.cantidad -= retirar_necesidad
             
             for lote in lotes_inventario:
-                if retirar_reserva + agregar_inventario <= 0:
-                    break
-
                 if lote.cantidadReservada > 0:
                     cantidad_a_recuperar = min(retirar_reserva, lote.cantidadReservada)
                     lote.cantidadReservada -= cantidad_a_recuperar
                     retirar_reserva -= cantidad_a_recuperar
-                    if cantidad_a_recuperar == 0:
-                        lote.cantidadDisponible += agregar_inventario
-                        agregar_inventario = 0                    
+
+                if retirar_reserva == 0:
+                    lote.cantidadDisponible += agregar_inventario
+                    agregar_inventario = 0                    
             
         try:
             db.session.commit()
@@ -103,7 +101,7 @@ class InventarioPedidoCancelado:
                 "response": {
                     "msg": f"Se ha actualizado la reserva de productos en el sistema: {lista_reserva}"
                 },
-                "status_code": 200
+                "status_code": 201
             }
         
         except Exception as e:
@@ -114,5 +112,3 @@ class InventarioPedidoCancelado:
                 },
                 "status_code": 500
             }
-                
-

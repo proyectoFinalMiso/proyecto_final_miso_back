@@ -12,6 +12,7 @@ from src.commands.inventario.crear_producto import CrearProducto
 from src.commands.inventario.ingresar_inventario import IngresarInventario
 from src.commands.inventario.listar_inventario import ListarInventarios
 from src.commands.inventario.reservar_inventario import ReservarInventario
+from src.commands.inventario.actualizar_inventario_pedido_cancelado import InventarioPedidoCancelado
 
 blueprint = Blueprint('gestorPedidos', __name__)
 
@@ -80,4 +81,10 @@ def listar_inventarios():
 def reservar_inventario():
     request_body = request.get_json()
     response = ReservarInventario(request_body).execute()
+    return jsonify(response['response']), response['status_code']
+
+@blueprint.post('/inventario_pedido_cancelado')
+def actualizar_inventario_pedido_cancelado():
+    request_body = request.get_json()
+    response = InventarioPedidoCancelado(request_body).execute()
     return jsonify(response['response']), response['status_code']

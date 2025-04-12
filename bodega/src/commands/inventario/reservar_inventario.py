@@ -89,7 +89,7 @@ class ReservarInventario:
                 "response": {
                     "msg": f"Se ha actualizado la reserva de productos en el sistema: {lista_reserva}"
                 },
-                "status_code": 200
+                "status_code": 201
             }
         
         except Exception as e:
