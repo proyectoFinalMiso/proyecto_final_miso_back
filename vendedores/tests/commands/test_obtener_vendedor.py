@@ -20,7 +20,8 @@ class TestObtenerVendedor():
             nombre_random = fake.name()
             request_body = {
                 'nombre': nombre_random,
-                'email': f'{nombre_random.replace(" ", "")}@ccp.com'
+                'email': f'{nombre_random.replace(" ", "")}@ccp.com',
+                'contrasena': fake.password()
             }
             request_bodies.append(request_body)
 
