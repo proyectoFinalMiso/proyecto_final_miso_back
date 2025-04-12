@@ -11,6 +11,7 @@ from src.commands.posicion.buscar_posicion import BuscarPosicion
 from src.commands.inventario.crear_producto import CrearProducto
 from src.commands.inventario.ingresar_inventario import IngresarInventario
 from src.commands.inventario.listar_inventario import ListarInventarios
+from src.commands.inventario.reservar_inventario import ReservarInventario
 
 blueprint = Blueprint('gestorPedidos', __name__)
 
@@ -73,4 +74,10 @@ def ingresar_inventario():
 @blueprint.get('/stock_listar_inventarios')
 def listar_inventarios():
     response = ListarInventarios().execute()
+    return jsonify(response['response']), response['status_code']
+
+@blueprint.post('/stock_reservar_inventario')
+def reservar_inventario():
+    request_body = request.get_json()
+    response = ReservarInventario(request_body).execute()
     return jsonify(response['response']), response['status_code']

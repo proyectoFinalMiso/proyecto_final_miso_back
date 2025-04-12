@@ -13,16 +13,16 @@ class ReservarInventario:
         self.body = productos
 
     def check_campos_requeridos(self) -> bool:
+        check = True
         for producto in self.body:
             required_fields = ["sku", "cantidad"]
-
             if not all(field in producto for field in required_fields):
-                return False
+                check = False
 
             if not all(producto.get(field) for field in required_fields):
-                return False
+                check = False
 
-            return True
+        return check
 
     def calcular_reserva_y_necesidad(self) -> list:
         lista_reserva = []
@@ -52,6 +52,7 @@ class ReservarInventario:
                 "response": {"msg": "Campos requeridos no cumplidos"},
                 "status_code": 400,
             }
+        
         lista_reserva = self.calcular_reserva_y_necesidad()
         
         for producto_reservado in lista_reserva:
@@ -88,7 +89,7 @@ class ReservarInventario:
                 "response": {
                     "msg": f"Se ha actualizado la reserva de productos en el sistema: {lista_reserva}"
                 },
-                "status_code": 500
+                "status_code": 200
             }
         
         except Exception as e:
