@@ -26,6 +26,7 @@ def obtener_vendedor(vendedor_id):
 def login():
     body = request.get_json()
     response = LoginVendedor(body).execute()
+    return jsonify(response['response']), response['status_code']
 
 @blueprint.get('/listar_vendedores')
 def listar_vendedores():
