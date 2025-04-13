@@ -1,21 +1,17 @@
-# Usar la imagen base más ligera de Python 3.12
-FROM python:3.12-slim
+FROM python:3.12-bookworm
 
-# Establecer el directorio de trabajo dentro del contenedor
-WORKDIR /app
+WORKDIR /
 
-# Copiar el Pipfile y el Pipfile.lock (si lo tienes) al contenedor
-COPY Pipfile Pipfile.lock /app/
+RUN pip install pipenv
 
-# Instalar pipenv y las dependencias de la aplicación
-RUN pip install --no-cache-dir pipenv && \
-    pipenv install --deploy
+COPY Pipfile* ./
 
-# Copiar el resto de los archivos de tu aplicación
-COPY . /app
+RUN pipenv install --system
 
-# Exponer el puerto que utiliza tu aplicación (ajusta según sea necesario)
+RUN pipenv sync
+
+COPY . .
+
 EXPOSE 3005
 
-# Comando para ejecutar la aplicación
-CMD ["pipenv", "run", "python", "app.py", "production"]
+CMD [ "pipenv", "run", "python", "app.py", "production"]
