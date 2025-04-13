@@ -1,5 +1,6 @@
 import re
 from uuid import uuid4
+from werkzeug.security import generate_password_hash
 
 from src.commands.base_command import BaseCommand
 from src.models.model import db, Vendedor
@@ -14,7 +15,7 @@ class CrearVendedor(BaseCommand):
     
     def check_campos_requeridos(self) -> bool:
 
-        if self.vendedor_template.get('nombre') and self.vendedor_template.get('email'):
+        if self.vendedor_template.get('nombre') and self.vendedor_template.get('email') and self.vendedor_template.get('contrasena'):
             return True
         else:
             return False
@@ -67,10 +68,13 @@ class CrearVendedor(BaseCommand):
         
         id_vendedor = self.crear_uuid()
 
+        hashed_password = generate_password_hash(self.vendedor_template['contrasena'])
+
         nuevo_vendedor = Vendedor(
             id=id_vendedor,
             nombre=self.vendedor_template['nombre'],
-            email=self.vendedor_template['email']
+            email=self.vendedor_template['email'],
+            contrasena=hashed_password
         )
 
         db.session.add(nuevo_vendedor)

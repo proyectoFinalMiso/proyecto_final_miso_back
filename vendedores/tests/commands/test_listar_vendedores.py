@@ -1,12 +1,15 @@
 import pytest
 import json
+from datetime import datetime
 from faker import Faker
 
 from app import app
+from src.commands.listar_vendedores import ListarVendedores
 from src.commands.crear_vendedor import CrearVendedor
 from src.commands.base_command import BaseCommand
 
-class TestCrearVendedor():
+
+class TestListarVendedors():
 
     @pytest.fixture(scope='module')
     def gen_request(self):
@@ -17,19 +20,20 @@ class TestCrearVendedor():
             nombre_random = fake.name()
             request_body = {
                 'nombre': nombre_random,
-                'email': f'{nombre_random.replace(" ", "")}@ccp.com',
-                'contrasena': fake.password()
+                'email': f'{nombre_random.replace(" ", "")}@ccp.com'
             }
             request_bodies.append(request_body)
 
         return request_bodies
-    
+
     def test_base_model_inherit(self, gen_request):
-        route = CrearVendedor(gen_request[0])
+        route = ListarVendedores()
         assert isinstance(route, BaseCommand)
 
-    def test_crear_vendedor(self, gen_request):
+
+    def test_crear_listar(self, gen_request):
         with app.test_client() as client:
-            response = client.post('/crear_vendedor', json=gen_request[0])
-            assert response.status_code == 201
-            assert response.json == {"msg": "Vendedor creado con exito"}
+            response_crear = client.post('/crear_vendedor', json=gen_request[0])
+            
+            response_listar = client.get('/listar_vendedores')
+            assert response_listar.status_code == 200

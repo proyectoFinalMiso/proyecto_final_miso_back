@@ -20,6 +20,7 @@ class CrearPedido(BaseCommand):
             "direccion",
             "latitud",
             "longitud",
+            "productos"
         ]
 
         if not all(field in self.body for field in required_fields):
@@ -66,7 +67,7 @@ class CrearPedido(BaseCommand):
             db.session.commit()
             return {
                 "response": {
-                    "msg": "Pedido creado con exito"
+                    "msg": "Pedido creado con exito",
                 },
                 "status_code": 201
             }
