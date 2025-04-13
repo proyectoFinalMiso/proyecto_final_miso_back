@@ -34,7 +34,7 @@ class Inventario(db.Model):
     cantidadDisponible = db.Column(db.Integer, nullable=False)
     cantidadReservada = db.Column(db.Integer, default=0)
     fechaIgreso = db.Column(db.DateTime, nullable=False)
-    sku = db.Column(db.Integer, Identity(start=10001, cycle=True), nullable=False)
+    sku = db.Column(db.Integer, nullable=False)
 
     def to_dict(self):
         return {
@@ -53,7 +53,7 @@ class Inventario(db.Model):
 class NecesidadCompras(db.Model):
     __tablename__ = 'necesidadCompras'
 
-    sku = db.Column(db.Integer, db.ForeignKey('inventario.sku'), primary_key=True)
+    sku = db.Column(db.Integer, primary_key=True)
     cantidad = db.Column(db.Integer, nullable=False)
     fechaActualizacion = db.Column(db.DateTime, nullable=True)
     
