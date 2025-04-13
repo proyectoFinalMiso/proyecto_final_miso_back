@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from flask import Flask
+from flask_cors import CORS
 from sys import argv
 from waitress import serve
 
@@ -12,7 +13,7 @@ load_dotenv('.env')
 app = Flask(__name__)
 
 app.register_blueprint(blueprint)
-
+CORS(app, resources={r"/*": {"origins": "*"}})
 def config_app(db_url):
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url
     with app.app_context():
@@ -25,19 +26,19 @@ if __name__ == "__main__":
             load_dotenv(".env.test")
 
             DB_USER = os.environ.get("DB_USER")
-            # DB_PWD = os.environ.get("DB_PWD")
-            # DB_HOST = os.environ.get("DB_HOST")
-            # DB_PORT = os.environ.get("DB_PORT")
-            # DB_NAME = os.environ.get("DB_NAME")
+            DB_PWD = os.environ.get("DB_PWD")
+            DB_HOST = os.environ.get("DB_HOST")
+            DB_PORT = os.environ.get("DB_PORT")
+            DB_NAME = os.environ.get("DB_NAME")
 
-            # db_url = f"postgresql+pg8000://{DB_USER}:{DB_PWD}@{DB_HOST}/{DB_NAME}"
-            # config_app(db_url)
-            # app.run(host="0.0.0.0", port=3006, debug=True)
-
-            load_dotenv(".env.test")
-            db_url = f"sqlite:///microservice_test.db"
+            db_url = f"postgresql+pg8000://{DB_USER}:{DB_PWD}@{DB_HOST}:5432/{DB_NAME}"
             config_app(db_url)
             app.run(host="0.0.0.0", port=3006, debug=True)
+
+            # load_dotenv(".env.test")
+            # db_url = f"sqlite:///microservice_test.db"
+            # config_app(db_url)
+            # app.run(host="0.0.0.0", port=3006, debug=True)
 
         else:
             load_dotenv(".env.production")
@@ -48,7 +49,7 @@ if __name__ == "__main__":
             DB_PORT = os.environ.get("DB_PORT")
             DB_NAME = os.environ.get("DB_NAME")
 
-            db_url = f"postgresql+pg8000://{DB_USER}:{DB_PWD}@{DB_HOST}/{DB_NAME}"
+            db_url = f"postgresql+pg8000://{DB_USER}:{DB_PWD}@{DB_HOST}:5432/{DB_NAME}"
 
             print(db_url)
 
