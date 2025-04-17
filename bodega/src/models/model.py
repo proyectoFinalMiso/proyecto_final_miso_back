@@ -18,7 +18,9 @@ class Posicion(db.Model):
     __tablename__ = 'posicion'
 
     id = db.Column(db.String, primary_key=True)
-    bodega = db.Column(db.String, db.ForeignKey('bodega.id'), nullable=False)
+    nombre_posicion = db.Column(db.String, nullable=False)
+    bodega = db.Column(db.String, nullable=False)
+    id_bodega = db.Column(db.String, db.ForeignKey('bodega.id'), nullable=False)
     volumen = db.Column(db.Float, nullable=False)
     productos = db.Column(JSON, nullable=True, default=list)
 
@@ -28,8 +30,10 @@ class Inventario(db.Model):
     id = db.Column(db.String, primary_key=True)
     nombre = db.Column(db.String, nullable=False)
     valorUnitario = db.Column(db.Float, nullable=False)
-    bodega = db.Column(db.String, db.ForeignKey('bodega.id'), nullable=False)
-    posicion = db.Column(db.String, db.ForeignKey('posicion.id'), nullable=False)
+    bodega = db.Column(db.String, nullable=False)
+    id_bodega = db.Column(db.String, db.ForeignKey('bodega.id'), nullable=False)
+    posicion = db.Column(db.String, nullable=False)
+    id_posicion = db.Column(db.String, db.ForeignKey('posicion.id'), nullable=False)
     lote = db.Column(db.String, nullable=False)
     cantidadDisponible = db.Column(db.Integer, nullable=False)
     cantidadReservada = db.Column(db.Integer, default=0)

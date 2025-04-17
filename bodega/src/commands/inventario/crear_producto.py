@@ -26,7 +26,7 @@ class CrearProducto(BaseCommand):
         
     def verificar_bodega_existe(self) -> bool:
         existe_bodega_query = Bodega.query.filter(
-            Bodega.id == self.producto_template['bodega']
+            Bodega.nombre == self.producto_template['bodega']
         ).first()
         if existe_bodega_query:
             return True
