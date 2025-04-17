@@ -14,7 +14,7 @@ class CrearProducto(BaseCommand):
     
     def check_campos_requeridos(self) -> bool:
 
-        required_fields = ['nombre', 'bodega', 'posicion', 'lote', 'cantidad', 'sku', 'valorUnitario']
+        required_fields = ['nombre', 'valorUnitario', 'bodega', 'lote', 'cantidad', 'sku']
 
         if not all(field in self.producto_template for field in required_fields):
             return False
@@ -33,20 +33,56 @@ class CrearProducto(BaseCommand):
         else:
             return False
         
-    def verificar_posicion_existe(self) -> bool:
-        existe_posicion_query = Posicion.query.filter(
-            Posicion.id == self.producto_template['posicion']
+    def obtener_id_bodega(self) -> str:
+        existe_bodega_query = Bodega.query.filter(
+            Bodega.nombre == self.producto_template['bodega']
         ).first()
+
+        if existe_bodega_query:
+            return existe_bodega_query.id
+        else:
+            return None
+        
+    def definir_posicion(self) -> str:
+        existe_posicion_query = Posicion.query.filter(
+            Posicion.volumen >= 100.0,
+            (Posicion.productos == '') | (Posicion.productos == [])
+        ).first()
+
         if existe_posicion_query:
-            return True
+            return {
+                'id': existe_posicion_query.id,
+                'nombre_posicion': existe_posicion_query.nombre_posicion,
+            }
         else:
             return False
+        
+    # def verificar_posicion_existe(self) -> bool:
+    #     existe_posicion_query = Posicion.query.filter(
+    #         Posicion.nombre_posicion == self.producto_template['posicion'],
+    #         Posicion.bodega == self.producto_template['bodega']
+    #     ).first()
+    #     if existe_posicion_query:
+    #         return True
+    #     else:
+    #         return False
+        
+    # def obtener_id_posicion(self) -> str:
+    #     existe_posicion_query = Posicion.query.filter(
+    #         Posicion.nombre_posicion == self.producto_template['posicion'],
+    #         Posicion.bodega == self.producto_template['bodega']
+    #     ).first()
+
+    #     if existe_posicion_query:
+    #         return existe_posicion_query.id
+    #     else:
+    #         return None
         
     def verificar_producto_existe(self) -> bool:
         existe_producto_query = Inventario.query.filter(
             Inventario.nombre == self.producto_template['nombre'],
             Inventario.bodega == self.producto_template['bodega'],
-            Inventario.posicion == self.producto_template['posicion'],
+            Inventario.sku == self.producto_template['sku'],
             Inventario.lote == self.producto_template['lote']
         ).first()
         if existe_producto_query:
@@ -80,13 +116,13 @@ class CrearProducto(BaseCommand):
                 "status_code": 404
             }
         
-        if not self.verificar_posicion_existe():
-            return {
-                "response": {
-                    "msg": "La posicion no existe."
-                },
-                "status_code": 404
-            }
+        # if not self.verificar_posicion_existe():
+        #     return {
+        #         "response": {
+        #             "msg": "La posicion no existe."
+        #         },
+        #         "status_code": 404
+        #     }
         
         if self.verificar_producto_existe():
             return {
@@ -96,14 +132,26 @@ class CrearProducto(BaseCommand):
                 "status_code": 409
             }
         
+        id_bodega = self.obtener_id_bodega()
         id_producto = self.crear_uuid()
+        posicion_producto = self.definir_posicion()
+
+        if not posicion_producto:
+            return {
+                "response": {
+                    "msg": "No hay posiciones disponibles."
+                },
+                "status_code": 404
+            }
 
         nuevo_producto = Inventario(
             id=id_producto,
             nombre=self.producto_template['nombre'],
             valorUnitario=self.producto_template['valorUnitario'],
             bodega=self.producto_template['bodega'],
-            posicion=self.producto_template['posicion'],
+            id_bodega=id_bodega,
+            posicion=posicion_producto['nombre_posicion'],
+            id_posicion=posicion_producto['id'],
             lote=self.producto_template['lote'],
             cantidadDisponible=self.producto_template['cantidad'],
             fechaIgreso=datetime.now(),
@@ -111,11 +159,11 @@ class CrearProducto(BaseCommand):
         )
 
         try:
-            self.agregar_producto_a_posicion(id_producto, self.producto_template['posicion'])
+            self.agregar_producto_a_posicion(id_producto, posicion_producto['id'])
         except Exception as e:
             return {
                 "response": {
-                    "msg": "Error al agregar el producto a la posicion",
+                    "msg": f"Error al agregar el producto a la posicion {str(e)}",
                 },
                 "status_code": 500
             }
@@ -148,7 +196,7 @@ class CrearProducto(BaseCommand):
             db.session.rollback()
             return {
                 "response": {
-                    "msg": "Error al crear el producto"
+                    "msg": f"Error al crear el producto {e}"
                 },
                 "status_code": 500
             }
