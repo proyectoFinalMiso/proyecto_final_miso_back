@@ -2,7 +2,7 @@ import string
 from uuid import uuid4
 
 from src.commands.base_command import BaseCommand
-from src.models.model import db, Bodega
+from src.models.model import db, Bodega, Posicion
 
 class CrearBodega(BaseCommand):
     
@@ -35,9 +35,19 @@ class CrearBodega(BaseCommand):
         else:
             return False
         
-    def crear_posiciones(self):
+    def crear_posiciones(self, id_bodega: str) -> list:
 
         valores = [f"{letra}{numero}" for letra in string.ascii_uppercase for numero in range(1, 4)]
+
+        data_posiciones = [
+            {
+                "id": self.crear_uuid(),
+                "bodega": id_bodega,
+                "volumen": 100
+            } for valor in valores
+        ]
+
+        db.session.bulk_insert_mappings(Posicion, data_posiciones)
 
         return valores
 
@@ -60,9 +70,11 @@ class CrearBodega(BaseCommand):
                 "status_code": 409
             }
         
-        posiciones = self.crear_posiciones()
+        
         
         id_bodega = self.crear_uuid()
+
+        posiciones = self.crear_posiciones(id_bodega)
 
         nueva_bodega = Bodega(
             id=id_bodega,
