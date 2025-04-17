@@ -1,3 +1,4 @@
+import string
 from uuid import uuid4
 
 from src.commands.base_command import BaseCommand
@@ -33,6 +34,13 @@ class CrearBodega(BaseCommand):
             return True
         else:
             return False
+        
+    def crear_posiciones(self):
+
+        valores = [f"{letra}{numero}" for letra in string.ascii_uppercase for numero in range(1, 4)]
+
+        return valores
+
     
     def execute(self):
         
@@ -52,11 +60,14 @@ class CrearBodega(BaseCommand):
                 "status_code": 409
             }
         
+        posiciones = self.crear_posiciones()
+        
         id_bodega = self.crear_uuid()
 
         nueva_bodega = Bodega(
             id=id_bodega,
             nombre=self.bodega_template['nombre'],
+            posiciones=posiciones,
             direccion=self.bodega_template['direccion'],
             latitude=self.bodega_template['latitude'],
             longitude=self.bodega_template['longitude'],
