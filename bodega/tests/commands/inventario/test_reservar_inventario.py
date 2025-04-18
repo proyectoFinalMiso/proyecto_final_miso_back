@@ -3,22 +3,10 @@ from app import app
 from datetime import datetime
 from faker import Faker
 
+from src.commands.inventario.reservar_inventario import ReservarInventario
 from src.models.model import Inventario, NecesidadCompras, db
 
 class TestReservarInventario():
-
-    @pytest.fixture(scope='module')
-    def gen_request_posicion(self):
-        fake = Faker()
-        request_bodies = []
-
-        for i in range(10):
-            request_body = {
-                'volumen': fake.pyfloat(),
-            }
-            request_bodies.append(request_body)
-
-        return request_bodies
     
     @pytest.fixture(scope='module')
     def gen_request_bodega(self):
@@ -46,13 +34,17 @@ class TestReservarInventario():
                 'nombre': fake.name(),
                 'valorUnitario': fake.pyfloat(),
                 'lote': fake.name(),
-                'fechaIgreso': datetime.now(),
+                'volumen': fake.pyfloat(min_value=0.1, max_value=0.5),
             }
             request_bodies.append(request_body)
 
         return request_bodies
+    
+    def test_base_model_inherit(self):
+        route = ReservarInventario([{"sku": 10001, "cantidad": 100}])
+        assert isinstance(route, ReservarInventario)
 
-    def test_generar_reservas_inventario(self, gen_request_bodega, gen_request_posicion, gen_request_producto):
+    def test_generar_reservas_inventario(self, gen_request_bodega, gen_request_producto):
         producto_1 = gen_request_producto[0]
         producto_1['sku'] = 10001
         producto_1['cantidad'] = 137
@@ -75,18 +67,11 @@ class TestReservarInventario():
 
         with app.test_client() as client:
             response_bodega = client.post('/crear_bodega', json=gen_request_bodega[0])
-            id_bodega = response_bodega.json['bodega']['id']
-
-            request_body_crear_posicion = gen_request_posicion[0]
-            request_body_crear_posicion['bodega'] = id_bodega
-
-            response_posicion = client.post('/crear_posicion', json=request_body_crear_posicion)
-            id_posicion = response_posicion.json['posicion']["id"]
+            nombre_bodega = response_bodega.json['bodega']['nombre']
 
             for producto in productos:
                 request_body = producto
-                request_body['bodega'] = id_bodega
-                request_body['posicion'] = id_posicion
+                request_body['bodega'] = nombre_bodega
                 response_producto = client.post('/stock_crear_producto', json=request_body)
                 assert response_producto.status_code == 201
             
