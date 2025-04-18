@@ -22,6 +22,7 @@ class ListarPosicion(BaseCommand):
             for posicion in posiciones:
                 posiciones_list.append({
                     "id": posicion.id,
+                    "nombre_posicion": posicion.nombre_posicion,
                     "bodega": posicion.bodega,
                     "volumen": posicion.volumen
                 })

@@ -35,14 +35,16 @@ class CrearBodega(BaseCommand):
         else:
             return False
         
-    def crear_posiciones(self, id_bodega: str) -> list:
+    def crear_posiciones(self, nombre_bodega: str, id_bodega: str) -> list:
 
         valores = [f"{letra}{numero}" for letra in string.ascii_uppercase for numero in range(1, 4)]
 
         data_posiciones = [
             {
                 "id": self.crear_uuid(),
-                "bodega": id_bodega,
+                "nombre_posicion": valor,
+                "bodega": nombre_bodega,
+                "id_bodega": id_bodega,
                 "volumen": 100
             } for valor in valores
         ]
@@ -74,7 +76,7 @@ class CrearBodega(BaseCommand):
         
         id_bodega = self.crear_uuid()
 
-        posiciones = self.crear_posiciones(id_bodega)
+        posiciones = self.crear_posiciones(self.bodega_template['nombre'], id_bodega)
 
         nueva_bodega = Bodega(
             id=id_bodega,

@@ -9,7 +9,6 @@ from src.commands.posicion.crear_posicion import CrearPosicion
 from src.commands.posicion.listar_posiciones import ListarPosicion
 from src.commands.posicion.buscar_posicion import BuscarPosicion
 from src.commands.inventario.crear_producto import CrearProducto
-from src.commands.inventario.ingresar_inventario import IngresarInventario
 from src.commands.inventario.listar_inventario import ListarInventarios
 from src.commands.inventario.reservar_inventario import ReservarInventario
 from src.commands.inventario.actualizar_inventario_pedido_cancelado import InventarioPedidoCancelado
@@ -65,12 +64,6 @@ def buscar_posicion():
 def crear_producto():
     request_body = request.get_json()
     response = CrearProducto(request_body).execute()
-    return jsonify(response['response']), response['status_code']
-
-@blueprint.post('/stock_ingresar_inventario')
-def ingresar_inventario():
-    request_body = request.get_json()
-    response = IngresarInventario(request_body).execute()
     return jsonify(response['response']), response['status_code']
 
 @blueprint.get('/stock_listar_inventarios')

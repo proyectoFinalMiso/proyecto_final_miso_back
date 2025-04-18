@@ -18,7 +18,9 @@ class Posicion(db.Model):
     __tablename__ = 'posicion'
 
     id = db.Column(db.String, primary_key=True)
-    bodega = db.Column(db.String, db.ForeignKey('bodega.id'), nullable=False)
+    nombre_posicion = db.Column(db.String, nullable=False)
+    bodega = db.Column(db.String, nullable=False)
+    id_bodega = db.Column(db.String, db.ForeignKey('bodega.id'), nullable=False)
     volumen = db.Column(db.Float, nullable=False)
     productos = db.Column(JSON, nullable=True, default=list)
 
@@ -28,13 +30,16 @@ class Inventario(db.Model):
     id = db.Column(db.String, primary_key=True)
     nombre = db.Column(db.String, nullable=False)
     valorUnitario = db.Column(db.Float, nullable=False)
-    bodega = db.Column(db.String, db.ForeignKey('bodega.id'), nullable=False)
-    posicion = db.Column(db.String, db.ForeignKey('posicion.id'), nullable=False)
+    bodega = db.Column(db.String, nullable=False)
+    id_bodega = db.Column(db.String, db.ForeignKey('bodega.id'), nullable=False)
+    posicion = db.Column(db.String, nullable=False)
+    id_posicion = db.Column(db.String, db.ForeignKey('posicion.id'), nullable=False)
     lote = db.Column(db.String, nullable=False)
     cantidadDisponible = db.Column(db.Integer, nullable=False)
     cantidadReservada = db.Column(db.Integer, default=0)
     fechaIgreso = db.Column(db.DateTime, nullable=False)
     sku = db.Column(db.Integer, nullable=False)
+    volumen = db.Column(db.Float, nullable=False)
 
     def to_dict(self):
         return {
@@ -42,12 +47,15 @@ class Inventario(db.Model):
             'nombre': self.nombre,
             'valorUnitario': self.valorUnitario,
             'bodega': self.bodega,
+            'id_bodega': self.id_bodega,
             'posicion': self.posicion,
+            'id_posicion': self.id_posicion,
             'lote': self.lote,
             'cantidadDisponible': self.cantidadDisponible,
             'cantidadReservada': self.cantidadReservada,
             'fechaIngreso': str(self.fechaIgreso),
-            'sku': self.sku
+            'sku': self.sku,
+            'volumen': self.volumen
         }
     
 class NecesidadCompras(db.Model):
