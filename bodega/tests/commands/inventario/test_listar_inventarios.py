@@ -4,25 +4,12 @@ from datetime import datetime
 from faker import Faker
 
 from app import app
-from src.commands.inventario.ingresar_inventario import IngresarInventario
+from src.commands.inventario.crear_producto import CrearProducto
 from src.commands.inventario.listar_inventario import ListarInventarios
 from src.commands.base_command import BaseCommand
 
 
 class TestListarInventarios():
-
-    @pytest.fixture(scope="module")
-    def gen_request_posicion(self):
-        fake = Faker()
-        request_bodies = []
-
-        for i in range(10):
-            request_body = {
-                "volumen": fake.pyfloat(),
-            }
-            request_bodies.append(request_body)
-
-        return request_bodies
 
     @pytest.fixture(scope="module")
     def gen_request_bodega(self):
@@ -47,14 +34,12 @@ class TestListarInventarios():
 
         for i in range(10):
             request_body = {
-                "nombre": fake.name(),
-                "bodega": fake.uuid4(),
-                "posicion": fake.uuid4(),
-                "valorUnitario": fake.pyfloat(),
-                "lote": fake.name(),
-                "cantidad": fake.pyint(),
-                "fechaIgreso": datetime.now(),
-                "sku": fake.pyint(),
+                'nombre': fake.name(),
+                'valorUnitario': fake.pyfloat(),
+                'lote': fake.name(),
+                'cantidad': fake.pyint(min_value=1, max_value=10),
+                'sku': fake.pyint(),
+                'volumen': fake.pyfloat(min_value=0.1, max_value=10.0),
             }
             request_bodies.append(request_body)
 
@@ -65,21 +50,13 @@ class TestListarInventarios():
         route = ListarInventarios()
         assert isinstance(route, BaseCommand)
 
-    def test_listar_inventarios(self, gen_request, gen_request_bodega, gen_request_posicion):
+    def test_listar_inventarios(self, gen_request, gen_request_bodega):
         with app.test_client() as client:
             response_bodega = client.post("/crear_bodega", json=gen_request_bodega[0])
-            id_bodega = response_bodega.json['bodega']['id']
-
-            request_body_crear_posicion = gen_request_posicion[0]   
-            request_body_crear_posicion['bodega'] = id_bodega
-
-            response_posicion = client.post("/crear_posicion", json=request_body_crear_posicion)
-            print(response_posicion.json)
-            id_posicion = response_posicion.json['posicion']["id"]
+            id_bodega = response_bodega.json['bodega']['nombre']
 
             request_body = gen_request[0]
             request_body['bodega'] = id_bodega
-            request_body['posicion'] = id_posicion
 
             response_inventario = client.post("/stock_crear_producto", json=request_body)
             assert response_inventario.status_code == 201
