@@ -39,6 +39,7 @@ class Inventario(db.Model):
     cantidadReservada = db.Column(db.Integer, default=0)
     fechaIgreso = db.Column(db.DateTime, nullable=False)
     sku = db.Column(db.Integer, nullable=False)
+    volumen = db.Column(db.Float, nullable=False)
 
     def to_dict(self):
         return {
@@ -46,12 +47,15 @@ class Inventario(db.Model):
             'nombre': self.nombre,
             'valorUnitario': self.valorUnitario,
             'bodega': self.bodega,
+            'id_bodega': self.id_bodega,
             'posicion': self.posicion,
+            'id_posicion': self.id_posicion,
             'lote': self.lote,
             'cantidadDisponible': self.cantidadDisponible,
             'cantidadReservada': self.cantidadReservada,
             'fechaIngreso': str(self.fechaIgreso),
-            'sku': self.sku
+            'sku': self.sku,
+            'volumen': self.volumen
         }
     
 class NecesidadCompras(db.Model):

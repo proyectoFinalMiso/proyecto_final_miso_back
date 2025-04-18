@@ -14,7 +14,13 @@ class CrearProducto(BaseCommand):
     
     def check_campos_requeridos(self) -> bool:
 
-        required_fields = ['nombre', 'valorUnitario', 'bodega', 'lote', 'cantidad', 'sku']
+        required_fields = ['nombre', 
+                           'valorUnitario', 
+                           'bodega', 
+                           'lote', 
+                           'cantidad', 
+                           'sku', 
+                           'volumen']
 
         if not all(field in self.producto_template for field in required_fields):
             return False
@@ -41,42 +47,7 @@ class CrearProducto(BaseCommand):
         if existe_bodega_query:
             return existe_bodega_query.id
         else:
-            return None
-        
-    def definir_posicion(self) -> str:
-        existe_posicion_query = Posicion.query.filter(
-            Posicion.volumen >= 100.0,
-            (Posicion.productos == '') | (Posicion.productos == [])
-        ).first()
-
-        if existe_posicion_query:
-            return {
-                'id': existe_posicion_query.id,
-                'nombre_posicion': existe_posicion_query.nombre_posicion,
-            }
-        else:
             return False
-        
-    # def verificar_posicion_existe(self) -> bool:
-    #     existe_posicion_query = Posicion.query.filter(
-    #         Posicion.nombre_posicion == self.producto_template['posicion'],
-    #         Posicion.bodega == self.producto_template['bodega']
-    #     ).first()
-    #     if existe_posicion_query:
-    #         return True
-    #     else:
-    #         return False
-        
-    # def obtener_id_posicion(self) -> str:
-    #     existe_posicion_query = Posicion.query.filter(
-    #         Posicion.nombre_posicion == self.producto_template['posicion'],
-    #         Posicion.bodega == self.producto_template['bodega']
-    #     ).first()
-
-    #     if existe_posicion_query:
-    #         return existe_posicion_query.id
-    #     else:
-    #         return None
         
     def verificar_producto_existe(self) -> bool:
         existe_producto_query = Inventario.query.filter(
@@ -90,14 +61,131 @@ class CrearProducto(BaseCommand):
         else:
             return False
         
-    def agregar_producto_a_posicion(self, id_producto: str, id_posicion: str):
+    def posiciones_necesarias(self) -> int:
 
-        posicion = Posicion.query.filter(Posicion.id == id_posicion).first()
+        volumen = float(self.producto_template['volumen'])
+        cantidad = int(self.producto_template['cantidad'])
+
+        if int((volumen * cantidad) % 100.0) == 0:
+            posiciones_necesarias = int((volumen * cantidad) // 100.0)
+        else:
+            posiciones_necesarias = int((volumen * cantidad) // 100.0) + 1
+
+        return posiciones_necesarias
         
-        if not posicion.productos:
-            posicion.productos = []
-        posicion.productos = posicion.productos + [id_producto]
-        db.session.commit()
+    def definir_posiciones(self, posiciones_necesarias: int) -> list:
+
+        posiciones = Posicion.query.filter(
+            Posicion.bodega == self.producto_template['bodega'],
+            (Posicion.productos == '') | (Posicion.productos == [])
+        ).limit(posiciones_necesarias).all()
+
+        if len(posiciones) == posiciones_necesarias:
+            posiciones = [
+                {
+                    'id': posicion.id,
+                    'nombre_posicion': posicion.nombre_posicion,
+                    'volumen': posicion.volumen
+                } for posicion in posiciones
+            ]
+            return posiciones
+        else:
+            return False
+
+    def unidades_por_posicion(self, volumen: float) -> int:
+        pass
+
+    def crear_producto(self, id_bodega: str, posicion: dict) -> Inventario:
+
+        id_producto = self.crear_uuid()
+
+        nuevo_producto = Inventario(
+            id = id_producto,
+            nombre = self.producto_template['nombre'],
+            valorUnitario = self.producto_template['valorUnitario'],
+            bodega = self.producto_template['bodega'],
+            id_bodega = id_bodega,
+            posicion = posicion['nombre_posicion'],
+            id_posicion = posicion['id'],
+            lote = self.producto_template['lote'],
+            cantidadDisponible = self.producto_template['cantidad'],
+            fechaIgreso = datetime.now(),
+            sku = self.producto_template['sku'],
+            volumen = self.producto_template['volumen']
+        )
+        
+        db.session.add(nuevo_producto)
+
+        return nuevo_producto
+
+    def crear_producto_multiples_posiciones(self, id_bodega: str, posiciones: list, cantidad: int, volumen_producto: float) -> list:
+        # volumen_producto = float(self.producto_template['volumen'])  # Volumen de un producto
+        nuevos_productos = []  # Lista para almacenar los productos creados
+
+        for posicion in posiciones:
+            volumen_disponible = posicion['volumen']  # Volumen disponible en la posición
+            capacidad_por_posicion = int(volumen_disponible // volumen_producto)  # Productos que caben en esta posición
+
+            if capacidad_por_posicion > 0:
+                # Determinar cuántos productos asignar a esta posición
+                productos_a_asignar = min(capacidad_por_posicion, cantidad)
+
+                # Crear un nuevo registro en Inventario para esta posición
+                nuevo_producto = Inventario(
+                    id=self.crear_uuid(),
+                    nombre=self.producto_template['nombre'],
+                    valorUnitario=self.producto_template['valorUnitario'],
+                    bodega=self.producto_template['bodega'],
+                    id_bodega=id_bodega,
+                    posicion=posicion['nombre_posicion'],
+                    id_posicion=posicion['id'],
+                    lote=self.producto_template['lote'],
+                    cantidadDisponible=productos_a_asignar,
+                    fechaIgreso=datetime.now(),
+                    sku=self.producto_template['sku'],
+                    volumen=self.producto_template['volumen']
+                )
+
+                nuevos_productos.append(nuevo_producto)  # Agregar el producto a la lista
+                cantidad -= productos_a_asignar  # Reducir la cantidad restante
+
+            # Si ya no quedan productos por asignar, salir del bucle
+            if cantidad <= 0:
+                break
+
+        # Agregar los productos creados a la sesión de la base de datos
+        db.session.add_all(nuevos_productos)
+        return nuevos_productos
+
+    def agregar_stock(self, id_bodega: str, posiciones: list, cantidad: int, volumen_producto: float) -> list:
+
+        if len(posiciones) == 1:
+            try:
+                nuevo_producto = self.crear_producto(id_bodega, posiciones[0])
+
+                return [nuevo_producto]
+            except Exception as e:
+                print(e)
+                return False
+        else:
+            try:
+                nuevos_productos = self.crear_producto_multiples_posiciones(id_bodega, posiciones, cantidad, volumen_producto)
+                return nuevos_productos
+            except Exception as e:
+                print(e)
+                False
+
+    def agregar_producto_a_posiciones(self, productos: list, posiciones: list):
+
+        for i in posiciones:
+            posicion = Posicion.query.filter(Posicion.id == i['id']).first()
+
+            if not posicion.productos:
+                posicion.productos = []
+            
+            for i in productos:
+                posicion.productos = posicion.productos + [i.id]
+            db.session.commit()
 
     def execute(self):
         if not self.check_campos_requeridos():
@@ -116,14 +204,6 @@ class CrearProducto(BaseCommand):
                 "status_code": 404
             }
         
-        # if not self.verificar_posicion_existe():
-        #     return {
-        #         "response": {
-        #             "msg": "La posicion no existe."
-        #         },
-        #         "status_code": 404
-        #     }
-        
         if self.verificar_producto_existe():
             return {
                 "response": {
@@ -132,61 +212,65 @@ class CrearProducto(BaseCommand):
                 "status_code": 409
             }
         
+        #Obtener id de bodega
         id_bodega = self.obtener_id_bodega()
-        id_producto = self.crear_uuid()
-        posicion_producto = self.definir_posicion()
+        
+        # Definir numero de posiciones
+        posiciones_necesarias = self.posiciones_necesarias()
+        
+        # Definir posiciones
+        posiciones_producto = self.definir_posiciones(posiciones_necesarias)
 
-        if not posicion_producto:
+        if not posiciones_producto:
             return {
                 "response": {
                     "msg": "No hay posiciones disponibles."
                 },
                 "status_code": 404
             }
-
-        nuevo_producto = Inventario(
-            id=id_producto,
-            nombre=self.producto_template['nombre'],
-            valorUnitario=self.producto_template['valorUnitario'],
-            bodega=self.producto_template['bodega'],
-            id_bodega=id_bodega,
-            posicion=posicion_producto['nombre_posicion'],
-            id_posicion=posicion_producto['id'],
-            lote=self.producto_template['lote'],
-            cantidadDisponible=self.producto_template['cantidad'],
-            fechaIgreso=datetime.now(),
-            sku=self.producto_template['sku']
-        )
-
-        try:
-            self.agregar_producto_a_posicion(id_producto, posicion_producto['id'])
-        except Exception as e:
+        
+        agregar_stock = self.agregar_stock(id_bodega, 
+                                           posiciones_producto, 
+                                           int(self.producto_template['cantidad']),
+                                           float(self.producto_template['volumen'])
+                                           )
+        
+        if not agregar_stock:
             return {
                 "response": {
-                    "msg": f"Error al agregar el producto a la posicion {str(e)}",
+                    "msg": "Error al agregar el stock."
                 },
                 "status_code": 500
             }
         
-        db.session.add(nuevo_producto)
-
+        try:
+            self.agregar_producto_a_posiciones(agregar_stock, posiciones_producto)
+        except Exception as e:
+            print(e)
+            return {
+                "response": {
+                    "msg": f"Error al agregar el producto a la posicion",
+                },
+                "status_code": 500
+            }
+        
         try:
             
             db.session.commit()
 
             return {
                 "response": {
-                    "producto": {
-                        "id": nuevo_producto.id,
-                        "nombre": nuevo_producto.nombre,
-                        "valorUnitario": nuevo_producto.valorUnitario,
-                        "bodega": nuevo_producto.bodega,
-                        "posicion": nuevo_producto.posicion,
-                        "lote": nuevo_producto.lote,
-                        "cantidad": nuevo_producto.cantidadDisponible,
-                        "fechaIngreso": nuevo_producto.fechaIgreso,
-                        "sku": nuevo_producto.sku
-                    },
+                    # "producto": {
+                    #     "id": nuevo_producto.id,
+                    #     "nombre": nuevo_producto.nombre,
+                    #     "valorUnitario": nuevo_producto.valorUnitario,
+                    #     "bodega": nuevo_producto.bodega,
+                    #     "posicion": nuevo_producto.posicion,
+                    #     "lote": nuevo_producto.lote,
+                    #     "cantidad": nuevo_producto.cantidadDisponible,
+                    #     "fechaIngreso": nuevo_producto.fechaIgreso,
+                    #     "sku": nuevo_producto.sku
+                    # },
                     "msg": "Producto creado correctamente",
                     
                 },
