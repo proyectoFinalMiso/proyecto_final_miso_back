@@ -9,7 +9,6 @@ db = SQLAlchemy()
 
 class EstadoPedido(Enum):
     SOLICITADO = "SOLICITADO"
-    EN_PROCESO = "EN_PROCESO"
     FINALIZADO = "FINALIZADO"
     CANCELADO = "CANCELADO"
 

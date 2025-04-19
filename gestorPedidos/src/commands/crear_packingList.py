@@ -24,18 +24,19 @@ class CrearPackingList(BaseCommand):
         productos = []
         adaptador = AdaptadorProductos(getenv("MS_PRODUCTOS_URL"))
         for producto in lista_productos:
-            if not producto:
-                return False
             producto_existente = adaptador.confirmar_producto_existe(producto['sku'])
-            producto['costoTotal'] = producto['cantidad'] * producto_existente['valorUnitario']
-            productos.append(producto)
+            if not producto_existente:
+                productos.append(False)
+            else:
+                producto['costoTotal'] = producto['cantidad'] * producto_existente['valorUnitario']
+                productos.append(producto)
         return productos
 
     def execute(self):
         lista_productos = self.body
 
         productos = self.validar_productos_existen(lista_productos)
-        if not productos:
+        if not all(productos):
             return {
                 "response": {"msg": "Hay productos que no existen en el sistema"},
                 "status_code": 400,

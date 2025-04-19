@@ -29,9 +29,10 @@ def consultar_cliente(cliente_id):
     response = ConsultarCliente(cliente_id).execute()
     return jsonify(response['response']), response['status_code']
 
-@blueprint.get('/')
+@blueprint.get('/clientes')
 def listar_clientes():
-    response = ListarClientes().execute()
+    vendedor_id = request.args.get('vendedor_id')
+    response = ListarClientes(vendedor_id).execute()
     return jsonify(response['response']), response['status_code']
 
 @blueprint.post('/<cliente_id>/asignar_vendedor/<vendedor_id>')

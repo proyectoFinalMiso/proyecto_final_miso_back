@@ -23,3 +23,14 @@ class AdaptadorProductos(BaseHttpAdapter):
             return producto
         except RequestException:
             return False
+    
+    def listar_productos(self):
+        url = f"{self.url}/listar_productos"
+        try:
+            response = self.session.get(url)
+            response.raise_for_status()
+            return response.json()['body']
+        except RequestException:
+            return False
+    
+    

@@ -8,7 +8,10 @@ MS_GESTOR_CLIENTES_URL = rf"{getenv('MS_GESTOR_CLIENTES_URL')}"
 MS_PEDIDOS_URL = rf"{getenv('MS_PEDIDOS_URL')}"
 
 def handle_requests(host, path):
+    query = request.query_string.decode("utf-8")
     url = f"{host}/{path}"
+    if query:
+        url = f"{url}?{query}"
     if request.method != "GET":
         response = requests.request(
             method=request.method,

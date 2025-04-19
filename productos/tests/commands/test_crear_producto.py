@@ -38,7 +38,6 @@ class TestCrearProducto():
 
         return request_bodies
     
-    
     def test_base_model_inherit(self, gen_request_producto):
         # Test to ensure RouteCreation inherits from BaseCommand
         route = CrearProducto(gen_request_producto[0])
@@ -49,14 +48,10 @@ class TestCrearProducto():
         with app.test_client() as client:
             response_fabricante = client.post('/crear_fabricante', json=gen_request_fabricante[0])
             assert response_fabricante.status_code == 201
-
-            print(response_fabricante.json)
-
             crear_producto_body = gen_request_producto[0]
             crear_producto_body['id_fabricante'] = response_fabricante.json['id']
 
             response = client.post('/crear_producto', json=crear_producto_body)
-            print(response.json)
             assert response.status_code == 201
             assert response.json == {"msg": "Producto creado exitosamente"}
 
@@ -65,16 +60,12 @@ class TestCrearProducto():
         with app.test_client() as client:
             response_fabricante = client.post('/crear_fabricante', json=gen_request_fabricante[1])
             assert response_fabricante.status_code == 201
-
-            print(response_fabricante.json)
-
             crear_producto_body = gen_request_producto[0]
             crear_producto_body['id_fabricante'] = response_fabricante.json['id']
 
             client.post('/crear_producto', json=crear_producto_body)
 
             response_bad = client.post('/crear_producto', json=crear_producto_body)
-            print(response_bad.json)
             assert response_bad.status_code == 400
             assert response_bad.json == {"msg": "Producto ya existe"}
 
