@@ -38,10 +38,10 @@ class TestListarBodega():
 
     def test_listar_bodega_vacia(self, gen_request):
         with app.test_client() as client:
-            response_listar_bodega = client.get('/buscador_bodega', json={"clave":"no existe"})
+            response_listar_bodega = client.post('/buscador_bodega', json={"clave":"no existe"})
             assert response_listar_bodega.status_code == 404
 
     def test_listar_bodega_campos_requeridos(self, gen_request):
         with app.test_client() as client:
-            response_listar_bodega = client.get('/buscador_bodega', json={})
+            response_listar_bodega = client.post('/buscador_bodega', json={})
             assert response_listar_bodega.status_code == 400
