@@ -33,7 +33,7 @@ class TestListarBodega():
         with app.test_client() as client:
             response_bodega = client.post('/crear_bodega', json=gen_request[0])
             assert response_bodega.status_code == 201
-            response_listar_bodega = client.get('/buscador_bodega', json={"clave":gen_request[0]['nombre']})
+            response_listar_bodega = client.post('/buscador_bodega', json={"clave":gen_request[0]['nombre']})
             assert response_listar_bodega.status_code == 200
 
     def test_listar_bodega_vacia(self, gen_request):
