@@ -87,7 +87,7 @@ class TestRoutes:
             "status_code": 200
         }
         
-        response = client.get('/')
+        response = client.get('/clientes')
         
         assert response.status_code == 200
         data = json.loads(response.data.decode('utf-8'))
