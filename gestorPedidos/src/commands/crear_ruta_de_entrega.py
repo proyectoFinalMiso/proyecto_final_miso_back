@@ -33,7 +33,7 @@ class CrearRutaDeEntrega(BaseCommand):
         try:
 
             respuesta = requests.get(
-                url_obtener_producto, json={}, headers=headers)
+                url_obtener_producto, headers=headers)
 
             if respuesta.status_code not in [200, 201]:
 
@@ -176,7 +176,7 @@ class CrearRutaDeEntrega(BaseCommand):
 
         try:
 
-            respuesta = requests.get(
+            respuesta = requests.post(
                 url_obtener_bodega, json=payload, headers=headers)
 
             if respuesta.status_code not in [200, 201]:
