@@ -14,3 +14,6 @@ def database_host():
 
 PRODUCT_URL = getenv('MS_PRODUCTOS_URL')
 STORE_URL = getenv('MS_BODEGA_URL')
+CLIENT_URL = getenv('MS_GESTOR_CLIENTES_URL')
+CLIENT_URL = getenv('MS_GESTOR_CLIENTES_URL')
+SELLER_URL = getenv("MS_VENDEDOR_URL")
