@@ -18,6 +18,7 @@ waitress = "*"
 pg8000 = "*"
 python-dotenv = "*"
 colorama = "*"
+dotenv = "*"
 
 [dev-packages]
 

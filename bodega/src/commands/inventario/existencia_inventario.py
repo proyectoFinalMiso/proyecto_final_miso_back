@@ -3,16 +3,25 @@ from sqlalchemy import func
 from src.commands.base_command import BaseCommand
 from src.models.model import db, Inventario
 
-class ExistenciaInventario(BaseCommand):
+class ExistenciaInventarioTotales(BaseCommand):
 
     def execute(self):
         
         try:
+            print('here')
 
             existencia_inventario = db.session.query(
                 Inventario.sku.label('sku'),
                 (func.sum(Inventario.cantidadDisponible) + func.sum(Inventario.cantidadReservada)).label('cantidadTotal')
                 ).group_by(Inventario.sku).all()
+            
+            inventario_resultado = [
+                    {
+                        "sku": row.sku,
+                        "existencia": row.cantidadTotal
+                    }
+                    for row in existencia_inventario
+                ]
             
             if not existencia_inventario:
                 return {
@@ -24,8 +33,8 @@ class ExistenciaInventario(BaseCommand):
             
             return {
                 "response": {
-                    "msg": "Consulta exitosa.",
-                    "data": [existencia.to_dict() for existencia in existencia_inventario]
+                    "msg": "Inventario total ecnontrado.",
+                    "data": inventario_resultado
                 },
                 "status_code": 200,
             }

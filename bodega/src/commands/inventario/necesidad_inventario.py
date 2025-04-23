@@ -20,8 +20,9 @@ class NecesidadInventario(BaseCommand):
             return {
                 "response": {
                     "msg": "Necesidades de inventario encontradas.",
-                    "data": [necesidad.to_dict() for necesidad in necesidad_inventario]
-                }
+                    "body": [necesidad.to_dict() for necesidad in necesidad_inventario]
+                },
+                "status_code": 200
             }
         
         except Exception as e:
