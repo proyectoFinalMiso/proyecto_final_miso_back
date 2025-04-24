@@ -26,6 +26,8 @@ jobs:
 
   test-productos:
     runs-on: ubuntu-latest
+    env:
+      MS_BODEGA_URL: ${{ secrets.MS_BODEGA_URL }}
     steps:
     - uses: actions/checkout@v2
     - name: Install pipenv for productos
