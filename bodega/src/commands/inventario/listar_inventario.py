@@ -19,7 +19,7 @@ class ListarInventarios(BaseCommand):
                     "response": {
                         "msg": "No hay inventarios disponibles",
                     },
-                    "status_code": 404,
+                    "status_code": 200,
                 }
             return {
                 "response": {
