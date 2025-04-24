@@ -8,25 +8,32 @@ class ListarPedidos(BaseCommand):
 
     def __init__(self, cliente_id: str = None):
         self.cliente_id = cliente_id
-        
+
     def _get_json_from_url(self, url: str, key: str):
         headers = {"Content-Type": "application/json"}
         try:
             response = requests.get(url, headers=headers)
             if response.status_code not in [200, 201]:
-                raise Exception(f"Error {response.status_code}: {response.text}")
+                raise Exception(
+                    f"Error {response.status_code}: {response.text}")
             return response.json().get(key, [])
         except requests.RequestException as e:
-            raise Exception(f"Error de conexión al hacer GET a {url}: {str(e)}")
+            raise Exception(
+                f"Error de conexión al hacer GET a {url}: {str(e)}")
 
     def obtener_clientes(self):
         return self._get_json_from_url(CLIENT_URL + "/clientes", "clientes")
 
     def obtener_vendedores(self):
         return self._get_json_from_url(SELLER_URL + "/listar_vendedores", "body")
-    
-    def encontrar_por_id(self, elementos: list, id: str):
-        return next((elemento for elemento in elementos if elemento["id"] == id), None)
+
+    def encontrar_nombre_de_entidad(self, elementos: list, id: str, nameKey: str):
+        elemento = next(
+            (elemento for elemento in elementos if elemento["id"] == id), None)
+        if elemento:
+            return elemento[nameKey]
+        else:
+            return "No registrado"
 
     def execute(self):
         try:
@@ -34,19 +41,21 @@ class ListarPedidos(BaseCommand):
                 pedidos = Pedido.query.filter_by(cliente=self.cliente_id).all()
             else:
                 pedidos = Pedido.query.all()
-            
+
             clientes = self.obtener_clientes()
-            
+
             vendedores = self.obtener_vendedores()
-            
+
             pedidos_list = []
-            
+
             for pedido in pedidos:
-                
-                cliente = self.encontrar_por_id(clientes, pedido.cliente)
-                
-                vendedor = self.encontrar_por_id(vendedores, pedido.vendedor)
-                
+
+                cliente = self.encontrar_nombre_de_entidad(
+                    clientes, pedido.cliente, "nombre")
+
+                vendedor = self.encontrar_nombre_de_entidad(
+                    vendedores, pedido.vendedor, "nombre")
+
                 pedidos_list.append(
                     {
                         "id": pedido.id,
