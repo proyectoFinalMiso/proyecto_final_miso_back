@@ -146,9 +146,8 @@ class CrearRutaDeEntrega(BaseCommand):
                 raise Exception(
                     f"No hay stock suficiente para el producto: {producto_a_enviar}"
                 )
-        
 
-        coordenadas = [[c["latitude"], c["longitude"],  c["nombre"],  c["direccion"], c["id"]]
+        coordenadas = [[c["latitude"], c["longitude"],  c["nombre"],  c["direccion"], c["sku"]]
                        for c in ruta]
 
         distancias = self.calcular_distancias(coordenadas)
@@ -159,10 +158,11 @@ class CrearRutaDeEntrega(BaseCommand):
 
         for i in ruta_optimizada:
             ruta_final.append(coordenadas[i])
-            
-        ruta_formateada = [{"latitud":r[0],"longitud":r[1], "nombre":r[2], "direccion":r[3], "id":r[4]} for r in ruta_final]
 
-        return ruta_formateada 
+        ruta_formateada = [{"latitud": r[0], "longitud": r[1],
+                            "nombre": r[2], "direccion": r[3], "id": r[4]} for r in ruta_final]
+
+        return ruta_formateada
 
     def obtener_bodega(self, id):
 
@@ -218,19 +218,20 @@ class CrearRutaDeEntrega(BaseCommand):
         inventario = self.obtener_inventario()
 
         inventario_por_sku = {str(item['sku']): item for item in inventario}
-        
+
         sin_stock = []
 
         for sku in skus:
 
             if sku not in inventario_por_sku:
-                
-                sin_stock.append({"id":sku, "direccion": f"No hay inventario para el SKU: {sku}."})
 
-        if(len(sin_stock)>0):
+                sin_stock.append(
+                    {"id": sku, "direccion": f"No hay inventario para el SKU: {sku}."})
+
+        if (len(sin_stock) > 0):
             nueva_ruta_de_entrega = RutaDeEntrega(
-            pedidoID=pedido_id,
-            ruta=str(sin_stock)
+                pedidoID=pedido_id,
+                ruta=str(sin_stock)
             )
 
             db.session.add(nueva_ruta_de_entrega)
@@ -242,7 +243,7 @@ class CrearRutaDeEntrega(BaseCommand):
                 },
                 "status_code": 201
             }
-        
+
         inventario_filtrado = [inventario_por_sku[sku] for sku in skus]
 
         informacion_de_entrega = []
