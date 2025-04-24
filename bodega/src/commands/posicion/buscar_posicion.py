@@ -1,3 +1,5 @@
+from sqlalchemy import or_
+
 from src.commands.base_command import BaseCommand
 from src.models.model import db, Posicion
 
@@ -7,15 +9,17 @@ class BuscarPosicion(BaseCommand):
         self.body = request_body
 
     def check_campos_requeridos(self) -> bool:
-        if self.body.get("id_posicion"):
+        if self.body.get("posicion"):
             return True
         else:
             return False
         
     def buscar_posicion(self) -> bool:
-        id_posicion = f"%{self.body['id_posicion']}%"
+        clave = f"%{self.body['posicion']}%"
         return db.session.query(Posicion).filter(
-            Posicion.id.ilike(id_posicion)
+            or_(Posicion.id.ilike(clave),
+                Posicion.nombre_posicion.ilike(clave),
+            )
         ).all()
     
     def execute(self):
@@ -35,6 +39,7 @@ class BuscarPosicion(BaseCommand):
             posiciones_serializado = [
                 {
                     "id": posicion.id,
+                    "nombre_posicion": posicion.nombre_posicion,
                     "bodega": posicion.bodega,
                     "volumen": posicion.volumen,
                     "productos": posicion.productos if posicion.productos else "Aun no tiene productos"
