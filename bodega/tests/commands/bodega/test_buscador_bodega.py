@@ -33,15 +33,15 @@ class TestListarBodega():
         with app.test_client() as client:
             response_bodega = client.post('/crear_bodega', json=gen_request[0])
             assert response_bodega.status_code == 201
-            response_listar_bodega = client.get('/buscador_bodega', json={"clave":gen_request[0]['nombre']})
+            response_listar_bodega = client.post('/buscador_bodega', json={"clave":gen_request[0]['nombre']})
             assert response_listar_bodega.status_code == 200
 
     def test_listar_bodega_vacia(self, gen_request):
         with app.test_client() as client:
-            response_listar_bodega = client.get('/buscador_bodega', json={"clave":"no existe"})
+            response_listar_bodega = client.post('/buscador_bodega', json={"clave":"no existe"})
             assert response_listar_bodega.status_code == 404
 
     def test_listar_bodega_campos_requeridos(self, gen_request):
         with app.test_client() as client:
-            response_listar_bodega = client.get('/buscador_bodega', json={})
+            response_listar_bodega = client.post('/buscador_bodega', json={})
             assert response_listar_bodega.status_code == 400

@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from enum import Enum
 
 from flask_sqlalchemy import SQLAlchemy
@@ -43,3 +44,4 @@ class RutaDeEntrega(db.Model):
                    nullable=False, primary_key=True)
     pedidoID = db.Column(db.String)
     ruta = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False)

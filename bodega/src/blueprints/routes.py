@@ -33,7 +33,7 @@ def listar_bodega():
     response = ListarBodega().execute()
     return jsonify(response['response']), response['status_code']
 
-@blueprint.get('/buscador_bodega')
+@blueprint.post('/buscador_bodega')
 def buscar_bodega():
     request_body = request.get_json()
     response = BuscadorBodega(request_body).execute()
