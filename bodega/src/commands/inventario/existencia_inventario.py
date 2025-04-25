@@ -28,7 +28,7 @@ class ExistenciaInventarioTotales(BaseCommand):
                     "response": {
                         "msg": "No se encontraron registros de inventario.",
                     },
-                    "status_code": 200,
+                    "status_code": 404,
                 }
             
             return {
