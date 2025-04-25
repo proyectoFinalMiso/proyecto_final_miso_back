@@ -46,7 +46,7 @@ class ListarProductos(BaseCommand):
         existencias = self.extraer_existencias()
         necesidad = self.extraer_necesidad()
         productos_final = []
-
+        
         for producto in productos_serializado:
             existencia_producto = 0
             necesidad_producto = 0

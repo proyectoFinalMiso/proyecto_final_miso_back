@@ -21,7 +21,7 @@ class AdaptadorBodega(BaseHttpAdapter):
             existencias = response.json()['data']
             return existencias
         except RequestException:
-            return False
+            return {}
     
     def listar_necesidad(self):
         url = f"{self.url}/inventario_necesidad"
@@ -31,6 +31,6 @@ class AdaptadorBodega(BaseHttpAdapter):
             necesidades = response.json()['body']
             return necesidades
         except RequestException:
-            return False
+            return {}
     
     
