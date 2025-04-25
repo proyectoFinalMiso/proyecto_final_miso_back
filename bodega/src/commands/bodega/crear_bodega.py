@@ -35,9 +35,10 @@ class CrearBodega(BaseCommand):
         else:
             return False
         
-    def crear_posiciones(self, nombre_bodega: str, id_bodega: str) -> list:
-
-        valores = [f"{letra}{numero}" for letra in string.ascii_uppercase for numero in range(1, 4)]
+    def valores_posiciones(self) -> list:
+        return [f"{letra}{numero}" for letra in string.ascii_uppercase for numero in range(1, 4)]
+        
+    def crear_posiciones(self, valores: list, nombre_bodega: str, id_bodega: str) -> list:
 
         data_posiciones = [
             {
@@ -72,21 +73,22 @@ class CrearBodega(BaseCommand):
                 "status_code": 409
             }
         
-        
-        
         id_bodega = self.crear_uuid()
 
-        posiciones = self.crear_posiciones(self.bodega_template['nombre'], id_bodega)
+        valores_posiciones = self.valores_posiciones()
 
         nueva_bodega = Bodega(
             id=id_bodega,
             nombre=self.bodega_template['nombre'],
-            posiciones=posiciones,
+            posiciones=valores_posiciones,
             direccion=self.bodega_template['direccion'],
             latitude=self.bodega_template['latitude'],
             longitude=self.bodega_template['longitude'],
         )
         db.session.add(nueva_bodega)
+        db.session.commit()
+
+        posiciones = self.crear_posiciones(valores_posiciones, self.bodega_template['nombre'], id_bodega)
 
         try:
             db.session.commit()
