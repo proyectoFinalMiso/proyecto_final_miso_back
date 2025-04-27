@@ -1,3 +1,4 @@
+import json
 from uuid import uuid4
 
 from src.commands.base_command import BaseCommand
@@ -53,7 +54,7 @@ class CrearProducto(BaseCommand):
         existe_producto_query = Inventario.query.filter(
             Inventario.nombre == self.producto_template['nombre'],
             Inventario.bodega == self.producto_template['bodega'],
-            Inventario.sku == self.producto_template['sku'],
+            Inventario.sku == int(self.producto_template['sku']),
             Inventario.lote == self.producto_template['lote']
         ).first()
         if existe_producto_query:
@@ -67,7 +68,7 @@ class CrearProducto(BaseCommand):
         cantidad = int(self.producto_template['cantidad'])
 
         if int((volumen * cantidad) % 100.0) == 0:
-            posiciones_necesarias = int((volumen * cantidad) // 100.0)
+            posiciones_necesarias = 1
         else:
             posiciones_necesarias = int((volumen * cantidad) // 100.0) + 1
 
@@ -77,8 +78,10 @@ class CrearProducto(BaseCommand):
 
         posiciones = Posicion.query.filter(
             Posicion.bodega == self.producto_template['bodega'],
-            (Posicion.productos == '') | (Posicion.productos == [])
+            (Posicion.productos == '') | (Posicion.productos == '[]')
         ).limit(posiciones_necesarias).all()
+
+        print(posiciones)
 
         if len(posiciones) == posiciones_necesarias:
             posiciones = [
@@ -91,9 +94,6 @@ class CrearProducto(BaseCommand):
             return posiciones
         else:
             return False
-
-    def unidades_por_posicion(self, volumen: float) -> int:
-        pass
 
     def crear_producto(self, id_bodega: str, posicion: dict) -> Inventario:
 
@@ -181,10 +181,15 @@ class CrearProducto(BaseCommand):
             posicion = Posicion.query.filter(Posicion.id == i['id']).first()
 
             if not posicion.productos:
-                posicion.productos = []
+                posicion.productos = {}
             
             for i in productos:
-                posicion.productos = posicion.productos + [i.id]
+                posicion.productos = str({"id_producto": i.id,
+                                        "nombre_producto": i.nombre,
+                                        "cantidad_disponible": i.cantidadDisponible,
+                                        "sku": i.sku,
+                                        "lote": i.lote,
+                                        "volumen": i.volumen})
             db.session.commit()
 
     def execute(self):
@@ -217,9 +222,11 @@ class CrearProducto(BaseCommand):
         
         # Definir numero de posiciones
         posiciones_necesarias = self.posiciones_necesarias()
+        print(f'posiciones necesarias: {posiciones_necesarias}')
         
-        # Definir posiciones
+        # # Definir posiciones
         posiciones_producto = self.definir_posiciones(posiciones_necesarias)
+        print(f'posiciones para el producto: {posiciones_producto}')
 
         if not posiciones_producto:
             return {
@@ -260,17 +267,6 @@ class CrearProducto(BaseCommand):
 
             return {
                 "response": {
-                    # "producto": {
-                    #     "id": nuevo_producto.id,
-                    #     "nombre": nuevo_producto.nombre,
-                    #     "valorUnitario": nuevo_producto.valorUnitario,
-                    #     "bodega": nuevo_producto.bodega,
-                    #     "posicion": nuevo_producto.posicion,
-                    #     "lote": nuevo_producto.lote,
-                    #     "cantidad": nuevo_producto.cantidadDisponible,
-                    #     "fechaIngreso": nuevo_producto.fechaIgreso,
-                    #     "sku": nuevo_producto.sku
-                    # },
                     "msg": "Producto creado correctamente",
                     
                 },

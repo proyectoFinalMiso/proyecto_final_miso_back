@@ -22,7 +22,7 @@ class Posicion(db.Model):
     bodega = db.Column(db.String, nullable=False)
     id_bodega = db.Column(db.String, db.ForeignKey('bodega.id'), nullable=False)
     volumen = db.Column(db.Float, nullable=False)
-    productos = db.Column(JSON, nullable=True, default=list)
+    productos = db.Column(db.String, nullable=True, default='')
 
 class Inventario(db.Model):
     __tablename__ = 'inventario'
