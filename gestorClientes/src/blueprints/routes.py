@@ -4,6 +4,8 @@ from src.commands.consultar_cliente import ConsultarCliente
 from src.commands.listar_clientes import ListarClientes
 from src.commands.asignar_vendedor import AsignarVendedor
 from src.commands.login_cliente import LoginCliente
+from src.commands.registrar_visita import RegistrarVisita
+from src.commands.listar_visitas import ListarVisitas
 from src.commands.health_check import HealthCheck
 
 blueprint = Blueprint('gestorClientes', __name__)
@@ -39,3 +41,24 @@ def listar_clientes():
 def asignar_vendedor(cliente_id, vendedor_id):
     response = AsignarVendedor(cliente_id, vendedor_id).execute()
     return jsonify(response['response']), response['status_code'] 
+
+@blueprint.post('/<cliente_id>/registrar_visita')
+def registrar_visita(cliente_id):
+    body = request.get_json()
+    response = RegistrarVisita(cliente_id, body).execute()
+    return jsonify(response['response']), response['status_code']
+
+@blueprint.get('/visitas')
+def listar_visitas():
+    cliente_id = request.args.get('cliente_id')
+    vendedor_id = request.args.get('vendedor_id')
+    estado = request.args.get('estado')
+    sort_order = request.args.get('sort_order')
+
+    response = ListarVisitas(
+        cliente_id,
+        vendedor_id,
+        estado,
+        sort_order
+    ).execute()
+    return jsonify(response['response']), response['status_code']
