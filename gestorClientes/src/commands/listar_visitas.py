@@ -39,9 +39,10 @@ class ListarVisitas(BaseCommand):
             if not visitas:
                 return {
                     "response": {
+                        "visitas": [],
                         "msg": "No se encontraron visitas con los criterios especificados"
                     },
-                    "status_code": 404
+                    "status_code": 200
                 }
 
             visitas_data = [

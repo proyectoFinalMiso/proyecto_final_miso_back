@@ -52,7 +52,7 @@ class TestListarVisitas:
         mock_query.all.return_value = []
         command = ListarVisitas()
         result = command.execute()
-        assert result["status_code"] == 404
+        assert result["status_code"] == 200
         assert "No se encontraron visitas" in result["response"]["msg"]
         mock_query.all.assert_called_once()
 
