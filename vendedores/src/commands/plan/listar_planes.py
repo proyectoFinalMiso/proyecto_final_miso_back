@@ -11,7 +11,7 @@ class ListarPlanes(BaseCommand):
                 "id": plan.id,
                 "vendedor_id": plan.vendedor_id,
                 "vendedor_nombre": plan.vendedor_nombre,
-                "estado": str(plan.estado),
+                "estado": plan.estado.value,
                 "fechaInicio": plan.fechaInicio,
                 "fechaFinal": plan.fechaFinal,
                 "metaVentas": plan.metaVentas,

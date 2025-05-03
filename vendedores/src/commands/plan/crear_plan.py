@@ -2,7 +2,7 @@ from uuid import uuid4
 from datetime import datetime
 
 from src.commands.base_command import BaseCommand
-from src.models.model import db, PlanVentas
+from src.models.model import db, PlanVentas, Vendedor
 
 class CrearPlanVentas(BaseCommand):
 
@@ -11,7 +11,7 @@ class CrearPlanVentas(BaseCommand):
 
     def check_campos_requeridos(self) -> bool:
         
-        required_fields = ['vendedor_id', 'vendedor_nombre', 'estado', 'fechaInicio', 'metaVentas', 'productosPlan']
+        required_fields = ['vendedor_id', 'vendedor_nombre', 'metaVentas', 'productosPlan']
 
         if not all(field in self.plan_template for field in required_fields):
             return False
@@ -21,8 +21,8 @@ class CrearPlanVentas(BaseCommand):
     
     def verificar_vendedor_existe(self) -> bool:
         
-        existe_vendedor_query = PlanVentas.query.filter(
-            PlanVentas.vendedor_id == self.plan_template['vendedor_id']
+        existe_vendedor_query = Vendedor.query.filter(
+            Vendedor.id == self.plan_template['vendedor_id']
         ).first()
 
         if existe_vendedor_query:
@@ -40,7 +40,7 @@ class CrearPlanVentas(BaseCommand):
                 "status_code": 400
             }
 
-        if self.verificar_vendedor_existe():
+        if not self.verificar_vendedor_existe():
             return {
                 "response": {
                     "msg": "Vendedor no existe"
@@ -52,7 +52,7 @@ class CrearPlanVentas(BaseCommand):
             id=str(uuid4()),
             vendedor_id=self.plan_template['vendedor_id'],
             vendedor_nombre=self.plan_template['vendedor_nombre'],
-            estado=self.plan_template['estado'],
+            estado='INICIADO',
             fechaInicio=datetime.now(),
             metaVentas=self.plan_template['metaVentas'],
             productosPlan=self.plan_template['productosPlan']
