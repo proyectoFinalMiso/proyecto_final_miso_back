@@ -1,0 +1,9 @@
+id,vendedor_id,vendedor_nombre,estado,fecha_inicio,fecha_final,meta_ventas,productos_plan
+fb1b1088-fdaa-454e-b95b-d40a89a9f1b1,1712540e-cec2-4e4d-aeb4-58c7efd8dcfa,Juan Pablo,INICIADO,2025-03-30 13:43:31.359995,,2000000,"[''Papas margarita de pollo'', ''Papas margarita bbq'', ''CocaCola 3L'']"
+d1118790-70ba-488d-bb4b-162a7623ab81,7de48be2-5db1-4f59-b0ea-ce3faad857ad,Diego,INICIADO,2025-04-25 13:44:42.327136,,700000,"[''Tornillo estrella 2 in'', ''Destornillador estrella 20 cm'', ''Set llave Allen'']"
+f978e152-1344-4797-bf30-23bfeb968242,33a763bb-caad-4870-84de-f633b284f581,Alejandro,INICIADO,2025-05-04 13:46:07.914005,,1500000,"[''Bonbonbun bolsa 12'', ''Chocolatina Jumbo jet'', ''KitKat'']"
+13a20886-9a99-4c23-9399-6bc46419ea08,8f2fd62f-98dc-4956-a366-09ed52919e75,Simon,INICIADO,2025-04-10 13:47:31.792594,,10000000,"[''Nevecon Samsung'', ''Labadora whirpool'', ''Televisro Samsung Oled'']"
+67c39546-29e0-4d81-8f56-0900098854b2,8f2fd62f-98dc-4956-a366-09ed52919e75,Simon,INICIADO,2025-03-04 13:48:20.291016,,300000,"[''Comedor 4 puestos'', ''Biblioteca 1m x 0.9m'', ''Centro de entretenimiento 1.5 m'']"
+e0bdca3a-b902-4fd2-b7dd-68f337143d2a,1712540e-cec2-4e4d-aeb4-58c7efd8dcfa,Juan Pablo,FINALIZADO,2025-03-10 13:42:39.150207,2025-04-04 14:10:20.174947,2000000,"[''palmolive'', ''saviloe'', ''dove'']"
+07058293-a240-4c35-b393-ff306da49c1e,7de48be2-5db1-4f59-b0ea-ce3faad857ad,Diego,FINALIZADO,2025-04-14 13:45:16.252906,2025-05-04 14:10:37.806569,7000000,"[''Taladro percutor makita'', ''Botas de seguridad CAT'', ''casco obra'']"
+231ad056-3c09-4e60-88f6-929a01847b56,33a763bb-caad-4870-84de-f633b284f581,Alejandro,FINALIZADO,2025-03-25 13:46:38.014607,2025-04-15 14:11:01.265731,1500000,"[''Mouse logitech'', ''Teclado Red Dragon'', ''Pantalla Gaming Asus Rog Ally'']"

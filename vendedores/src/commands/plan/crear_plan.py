@@ -11,7 +11,7 @@ class CrearPlanVentas(BaseCommand):
 
     def check_campos_requeridos(self) -> bool:
         
-        required_fields = ['vendedor_id', 'vendedor_nombre', 'metaVentas', 'productosPlan']
+        required_fields = ['vendedor_id', 'vendedor_nombre', 'meta_ventas', 'productos_plan']
 
         if not all(field in self.plan_template for field in required_fields):
             return False
@@ -53,9 +53,9 @@ class CrearPlanVentas(BaseCommand):
             vendedor_id=self.plan_template['vendedor_id'],
             vendedor_nombre=self.plan_template['vendedor_nombre'],
             estado='INICIADO',
-            fechaInicio=datetime.now(),
-            metaVentas=self.plan_template['metaVentas'],
-            productosPlan=self.plan_template['productosPlan']
+            fecha_inicio=datetime.now(),
+            meta_ventas=self.plan_template['meta_ventas'],
+            productos_plan=self.plan_template['productos_plan']
         )
 
         db.session.add(plan_ventas)
@@ -67,8 +67,8 @@ class CrearPlanVentas(BaseCommand):
                     "msg": "Plan de ventas creado exitosamente",
                     "plan_ventas": {
                         "id": plan_ventas.id,
-                        "productos": plan_ventas.productosPlan,
-                        "menta": plan_ventas.metaVentas}
+                        "productos": plan_ventas.productos_plan,
+                        "menta": plan_ventas.meta_ventas}
                 },
                 "status_code": 201
             }
