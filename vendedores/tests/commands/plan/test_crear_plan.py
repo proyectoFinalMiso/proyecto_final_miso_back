@@ -35,8 +35,8 @@ class TestCrearPlanVentas():
             request_body = {
                 'vendedor_id': f'{fake.uuid4()}',
                 'vendedor_nombre': fake.name(),
-                'metaVentas': fake.random_int(min=1000, max=10000),
-                'productosPlan': str([
+                'meta_ventas': fake.random_int(min=1000, max=10000),
+                'productos_plan': str([
                         f'{fake.name()}', f'{fake.name()}'
                 ])
             }
@@ -64,8 +64,8 @@ class TestCrearPlanVentas():
             request_body = {
                 'vendedor_id': gen_request_vendedor[0]['id'],
                 'vendedor_nombre': gen_request_vendedor[0]['nombre'],
-                'metaVentas': gen_request_plan[0]['metaVentas'],
-                'productosPlan': gen_request_plan[0]['productosPlan']
+                'meta_ventas': gen_request_plan[0]['meta_ventas'],
+                'productos_plan': gen_request_plan[0]['productos_plan']
             }
             print(request_body)
             response = client.post('/crear_plan_ventas', json=request_body)

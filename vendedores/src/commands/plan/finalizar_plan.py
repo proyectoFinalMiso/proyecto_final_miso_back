@@ -46,7 +46,7 @@ class FinalizarPlan(BaseCommand):
         plan = PlanVentas.query.filter_by(id=self.plan_template['id']).first()
         print(plan)
         plan.estado = 'FINALIZADO' #str(EstadoPlan.FINALIZADO)
-        plan.fechaFinal = datetime.now()
+        plan.fecha_final = datetime.now()
         db.session.commit()
 
         return {
@@ -55,7 +55,7 @@ class FinalizarPlan(BaseCommand):
                 "body": {
                     "id": plan.id,
                     "estado": plan.estado.value,
-                    "fechaFinal": plan.fechaFinal,
+                    "fecha_final": plan.fecha_final,
                 }
             },
             "status_code": 200

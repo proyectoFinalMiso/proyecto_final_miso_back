@@ -12,10 +12,10 @@ class ListarPlanes(BaseCommand):
                 "vendedor_id": plan.vendedor_id,
                 "vendedor_nombre": plan.vendedor_nombre,
                 "estado": plan.estado.value,
-                "fechaInicio": plan.fechaInicio,
-                "fechaFinal": plan.fechaFinal,
-                "metaVentas": plan.metaVentas,
-                "productosPlan": plan.productosPlan,
+                "fecha_inicio": plan.fecha_inicio,
+                "fecha_final": plan.fecha_final,
+                "meta_ventas": plan.meta_ventas,
+                "productos_plan": plan.productos_plan,
             }
             for plan in planes
         ]

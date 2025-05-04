@@ -18,16 +18,16 @@ class EstadoPlan(Enum):
     FINALIZADO = "FINALIZADO"
 
 class PlanVentas(db.Model):
-    __tablename__ = 'planes_ventas'
+    __tablename__ = 'planVentas'
 
     id = db.Column(db.String, primary_key=True)
     vendedor_id = db.Column(db.String, db.ForeignKey('vendedores.id'), nullable=False)
     vendedor_nombre = db.Column(db.String, nullable=False)
     estado = db.Column(db.Enum(EstadoPlan), nullable=False)
-    fechaInicio = db.Column(db.DateTime, default=datetime.now())
-    fechaFinal = db.Column(db.DateTime, nullable=True)
-    metaVentas = db.Column(db.Integer, nullable=False)
-    productosPlan = db.Column(db.String, nullable=False)
+    fecha_inicio = db.Column(db.DateTime, default=datetime.now())
+    fecha_final = db.Column(db.DateTime, nullable=True)
+    meta_ventas = db.Column(db.Integer, nullable=False)
+    productos_plan = db.Column(db.String, nullable=False)
     # productosVendidos = db.Column(db.String, nullable=False)
 
 # class ReporteVendedores(db.Model):
