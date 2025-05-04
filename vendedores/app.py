@@ -24,15 +24,20 @@ def config_app(db_url):
 if __name__ == '__main__':
     try:
         if argv[1] == "dev":
-            load_dotenv(".env.test")
+            # load_dotenv(".env.test")
 
-            DB_USER = os.environ.get('DB_USER')
-            DB_PWD = os.environ.get('DB_PWD')
-            DB_HOST = os.environ.get('DB_HOST')
-            DB_PORT = os.environ.get('DB_PORT')
-            DB_NAME = os.environ.get('DB_NAME')
-            
-            db_url = f'postgresql+pg8000://{DB_USER}:{DB_PWD}@{DB_HOST}/{DB_NAME}'
+            # DB_USER = os.environ.get("DB_USER")
+            # DB_PWD = os.environ.get("DB_PWD")
+            # DB_HOST = os.environ.get("DB_HOST")
+            # DB_PORT = os.environ.get("DB_PORT")
+            # DB_NAME = os.environ.get("DB_NAME")
+
+            # db_url = f"postgresql+pg8000://{DB_USER}:{DB_PWD}@{DB_HOST}:5432/{DB_NAME}"
+            # config_app(db_url)
+            # app.run(host="0.0.0.0", port=3006, debug=True)
+
+            load_dotenv(".env.test")
+            db_url = f"sqlite:///microservice_test.db"
             config_app(db_url)
             app.run(host="0.0.0.0", port=3005, debug=True)
 
