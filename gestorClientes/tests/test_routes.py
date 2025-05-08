@@ -120,4 +120,63 @@ class TestRoutes:
         assert "cliente" in data
         assert data["cliente"] == cliente_mock
         assert data["cliente"]["vendedorAsociado"] == vendedor_id
-        mock_execute.assert_called_once() 
+        mock_execute.assert_called_once()
+
+    @patch('src.commands.generate_upload_url.GenerateUploadUrl.execute')
+    def test_generate_upload_url(self, mock_execute, client):
+        request_data = {
+            "filename": "video.mp4",
+            "contentType": "video/mp4",
+            "clientId": "client123"
+        }
+        signed_url = "https://fake-signed-url.com/upload"
+        gcs_path = "gs://fake-bucket/video.mp4"
+        
+        mock_execute.return_value = {
+            "response": {
+                "signedUrl": signed_url,
+                "gcsPath": gcs_path
+            },
+            "status_code": 200
+        }
+        
+        response = client.post('/generate_upload_url', 
+                              json=request_data, 
+                              content_type='application/json')
+        
+        assert response.status_code == 200
+        data = json.loads(response.data.decode('utf-8'))
+        assert "signedUrl" in data
+        assert data["signedUrl"] == signed_url
+        assert "gcsPath" in data
+        assert data["gcsPath"] == gcs_path
+        mock_execute.assert_called_once_with()
+
+    @patch('src.commands.notify_upload_complete.NotifyUploadComplete.execute')
+    def test_notify_upload_complete(self, mock_execute, client):
+        request_data = {
+            "blobPath": "gs://fake-bucket/video.mp4",
+            "clientId": "client123",
+            "vendedorId": "vendedor456"
+        }
+        message_id = "pubsub-message-id-123"
+        
+        mock_execute.return_value = {
+            "response": {
+                "message": "Upload notification sent successfully.",
+                "messageId": message_id
+            },
+            "status_code": 200
+        }
+        
+        response = client.post('/notify_upload_complete', 
+                              json=request_data, 
+                              content_type='application/json')
+        
+        assert response.status_code == 200
+        data = json.loads(response.data.decode('utf-8'))
+        assert "message" in data
+        assert data["message"] == "Upload notification sent successfully."
+        assert "messageId" in data
+        assert data["messageId"] == message_id
+        mock_execute.assert_called_once_with()

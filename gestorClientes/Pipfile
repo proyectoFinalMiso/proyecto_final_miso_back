@@ -19,6 +19,9 @@ pg8000 = "*"
 python-dotenv = "*"
 flask-bcrypt = "*"
 werkzeug = "*"
+google-cloud-storage = "*"
+google-cloud-pubsub = "*"
+avro = "*"
 
 [dev-packages]
 

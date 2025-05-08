@@ -7,6 +7,8 @@ from src.commands.login_cliente import LoginCliente
 from src.commands.registrar_visita import RegistrarVisita
 from src.commands.listar_visitas import ListarVisitas
 from src.commands.health_check import HealthCheck
+from src.commands.generate_upload_url import GenerateUploadUrl
+from src.commands.notify_upload_complete import NotifyUploadComplete
 
 blueprint = Blueprint('gestorClientes', __name__)
 
@@ -61,4 +63,16 @@ def listar_visitas():
         estado,
         sort_order
     ).execute()
+    return jsonify(response['response']), response['status_code']
+
+@blueprint.post('/generate_upload_url')
+def generate_upload_url():
+    body = request.get_json()
+    response = GenerateUploadUrl(body).execute()
+    return jsonify(response['response']), response['status_code']
+
+@blueprint.post('/notify_upload_complete')
+def notify_upload_complete():
+    body = request.get_json()
+    response = NotifyUploadComplete(body).execute()
     return jsonify(response['response']), response['status_code']
