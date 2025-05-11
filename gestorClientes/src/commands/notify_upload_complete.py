@@ -11,7 +11,7 @@ class NotifyUploadComplete(BaseCommand):
         self.PUB_SUB_TOPIC_NAME = os.environ.get("PUB_SUB_TOPIC_NAME")
 
     def check_campos_requeridos(self) -> bool:
-        required_fields = ["blobPath", "clientId", "vendedorId"]
+        required_fields = ["blobPath", "clientEmail", "vendedorEmail"]
         return all(field in self.body and self.body.get(field) for field in required_fields)
 
     def execute(self):
@@ -23,13 +23,13 @@ class NotifyUploadComplete(BaseCommand):
 
         if not self.check_campos_requeridos():
             return {
-                "response": {"msg": "Missing required fields: blobPath, clientId, vendedorId"},
+                "response": {"msg": "Missing required fields: blobPath, clientEmail, vendedorEmail"},
                 "status_code": 400
             }
 
         blob_path = self.body["blobPath"]
-        client_id = self.body["clientId"]
-        vendedor_id = self.body["vendedorId"]
+        client_email = self.body["clientEmail"]
+        vendedor_email = self.body["vendedorEmail"]
 
         try:
             publisher = pubsub_v1.PublisherClient()
@@ -39,8 +39,8 @@ class NotifyUploadComplete(BaseCommand):
                 "Message": f"Video uploaded successfully: {blob_path}",
                 "BlobPath": blob_path,
                 "CreationDate": datetime.datetime.utcnow().isoformat() + "Z",
-                "Customer": client_id,
-                "Seller": vendedor_id
+                "Customer": client_email,
+                "Seller": vendedor_email
             }
 
             print(f"Publishing message to topic {topic_path}: {message_data}")
