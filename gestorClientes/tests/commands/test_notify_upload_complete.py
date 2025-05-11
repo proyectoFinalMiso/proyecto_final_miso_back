@@ -14,29 +14,29 @@ class TestNotifyUploadComplete:
     def valid_request_body(self):
         return {
             "blobPath": f"gs://{fake.word()}/{fake.file_name(extension='mp4')}",
-            "clientId": fake.uuid4(),
-            "vendedorId": fake.uuid4()
+            "clientEmail": fake.uuid4(),
+            "vendedorEmail": fake.uuid4()
         }
 
     @pytest.fixture
     def request_body_missing_blobPath(self):
         return {
-            "clientId": fake.uuid4(),
-            "vendedorId": fake.uuid4()
+            "clientEmail": fake.uuid4(),
+            "vendedorEmail": fake.uuid4()
         }
 
     @pytest.fixture
     def request_body_missing_clientId(self):
         return {
             "blobPath": f"gs://{fake.word()}/{fake.file_name(extension='mp4')}",
-            "vendedorId": fake.uuid4()
+            "vendedorEmail": fake.uuid4()
         }
 
     @pytest.fixture
     def request_body_missing_vendedorId(self):
         return {
             "blobPath": f"gs://{fake.word()}/{fake.file_name(extension='mp4')}",
-            "clientId": fake.uuid4()
+            "clientEmail": fake.uuid4()
         }
 
     def test_check_campos_requeridos_success(self, valid_request_body):
@@ -89,8 +89,8 @@ class TestNotifyUploadComplete:
             "Message": f"Video uploaded successfully: {valid_request_body['blobPath']}",
             "BlobPath": valid_request_body['blobPath'],
             "CreationDate": fixed_naive_utcnow.isoformat() + "Z",
-            "Customer": valid_request_body['clientId'], 
-            "Seller": valid_request_body['vendedorId']
+            "Customer": valid_request_body['clientEmail'], 
+            "Seller": valid_request_body['vendedorEmail']
         }
         expected_json_bytes = json.dumps(expected_message_data).encode("utf-8")
 
