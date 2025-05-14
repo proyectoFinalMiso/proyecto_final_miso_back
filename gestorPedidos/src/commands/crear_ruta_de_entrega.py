@@ -47,6 +47,32 @@ class CrearRutaDeEntrega(BaseCommand):
             raise Exception(
                 f"Error de conexión al hacer POST a {url_obtener_producto}: {str(e)}")
 
+    def obtener_bodega(self, id):
+
+        url_obtener_bodega = STORE_URL + "/buscador_bodega"
+
+        payload = {"clave": id}
+
+        headers = {
+            "Content-Type": "application/json",
+        }
+
+        try:
+
+            respuesta = requests.post(
+                url_obtener_bodega, json=payload, headers=headers)
+
+            if respuesta.status_code not in [200, 201]:
+
+                raise Exception(f"Error al obtener inventario: "
+                                f"Status {respuesta.status_code} - {respuesta.text}")
+
+            return respuesta.json()
+        except requests.RequestException as e:
+
+            raise Exception(
+                f"Error de conexión al hacer POST a {url_obtener_bodega}: {str(e)}")
+
     def haversine(self, coord1, coord2):
 
         lat1, lon1, *_ = coord1
@@ -108,6 +134,8 @@ class CrearRutaDeEntrega(BaseCommand):
 
         ruta = []
 
+        productos_sin_stock = []
+
         for producto_a_enviar in packing_list:
 
             almacenes_con_stock = [
@@ -139,15 +167,21 @@ class CrearRutaDeEntrega(BaseCommand):
 
                     productos_recolectados += productos_disponibles
 
-                ruta.append(almacen)
+                ruta.append({**almacen, "cantidadRequerida": cantidad_requerida,
+                            "cantidadDisponible": productos_recolectados, })
 
             if productos_recolectados < cantidad_requerida:
+                print(productos_recolectados, cantidad_requerida)
 
-                raise Exception(
-                    f"No hay stock suficiente para el producto: {producto_a_enviar}"
-                )
+                productos_sin_stock.append(
+                    {"id": producto_a_enviar["sku"],
+                        "direccion": f"No hay stock suficiente para el producto: {producto_a_enviar['sku']}", "cantidadDisponible": productos_recolectados, "cantidadRequerida": cantidad_requerida}
+                ),
 
-        coordenadas = [[c["latitude"], c["longitude"],  c["nombre"],  c["direccion"], c["sku"]]
+        if len(productos_sin_stock) > 0:
+            return productos_sin_stock
+
+        coordenadas = [[c["latitude"], c["longitude"],  c["nombre"],  c["direccion"], c["sku"], c["cantidadDisponible"], c["cantidadRequerida"]]
                        for c in ruta]
 
         distancias = self.calcular_distancias(coordenadas)
@@ -160,35 +194,9 @@ class CrearRutaDeEntrega(BaseCommand):
             ruta_final.append(coordenadas[i])
 
         ruta_formateada = [{"latitud": r[0], "longitud": r[1],
-                            "nombre": r[2], "direccion": r[3], "id": r[4]} for r in ruta_final]
+                            "nombre": r[2], "direccion": r[3], "id": r[4], "cantidadDisponible": r[5], "cantidadRequerida": r[6]} for r in ruta_final]
 
         return ruta_formateada
-
-    def obtener_bodega(self, id):
-
-        url_obtener_bodega = STORE_URL + "/buscador_bodega"
-
-        payload = {"clave": id}
-
-        headers = {
-            "Content-Type": "application/json",
-        }
-
-        try:
-
-            respuesta = requests.post(
-                url_obtener_bodega, json=payload, headers=headers)
-
-            if respuesta.status_code not in [200, 201]:
-
-                raise Exception(f"Error al obtener inventario: "
-                                f"Status {respuesta.status_code} - {respuesta.text}")
-
-            return respuesta.json()
-        except requests.RequestException as e:
-
-            raise Exception(
-                f"Error de conexión al hacer POST a {url_obtener_bodega}: {str(e)}")
 
     def execute(self):
 
@@ -225,8 +233,11 @@ class CrearRutaDeEntrega(BaseCommand):
 
             if sku not in inventario_por_sku:
 
+                cantidad_requerida = [
+                    p for p in productos_requeridos if p["sku"] == sku][0]["cantidadRequerida"]
+
                 sin_stock.append(
-                    {"id": sku, "direccion": f"No hay inventario para el SKU: {sku}."})
+                    {"id": sku, "direccion": f"No hay inventario para el SKU: {sku}.", "cantidadDisponible": 0, "cantidadRequerida": int(cantidad_requerida)})
 
         if (len(sin_stock) > 0):
             nueva_ruta_de_entrega = RutaDeEntrega(
@@ -257,9 +268,6 @@ class CrearRutaDeEntrega(BaseCommand):
             informacion_de_entrega.append(
                 {**bodega, "cantidadDisponible": inventario_filtrado[i]["cantidadDisponible"], "sku": inventario_filtrado[i]["sku"]})
 
-        self.encontrar_ruta_optima(
-            informacion_de_entrega, productos_requeridos)
-
         ruta_sugerida = self.encontrar_ruta_optima(
             informacion_de_entrega, productos_requeridos)
 
@@ -276,7 +284,7 @@ class CrearRutaDeEntrega(BaseCommand):
 
             return {
                 "response": {
-                    "msg": self.encontrar_ruta_optima(informacion_de_entrega, productos_requeridos)
+                    "msg": ruta_sugerida
                 },
                 "status_code": 201
             }
