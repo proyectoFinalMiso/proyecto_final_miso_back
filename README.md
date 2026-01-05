@@ -111,21 +111,3 @@ proyecto_final_miso_back/
 ### API Endpoints
 
 To see detailed information about each enpoint in this project please check the [Postman collection file](https://github.com/proyectoFinalMiso/proyecto_final_miso_back/blob/main/proyecto_final.postman_collection.json) with all the details.
-
----
-
-You can contact me and get more information through:
-
-<div>
-  <p align="center">
-  <a href="https://www.linkedin.com/in/diegonaranjo94/" target="blank">
-    <img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="imorange" height="30" width="40" />
-    </a>
-  <a href="https://www.instagram.com/diegonaranjo.94/" target="blank">
-    <img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="imorange" height="30" width="40" />
-    </a>
-  <a href="https://github.com/diegonaranjo94" target="blank">
-    <img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/github.svg" alt="imorange" height="30" width="40" />
-    </a>
-  </p>
-</div>
