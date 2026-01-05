@@ -1,6 +1,6 @@
 # ERP Backend
 
-This is a graduation project for Master's of Engineering in Software. The scope of this project is limited to backend for an ERP designed previously by a team of 4. You can check more about the design and modules to understand the backend better in this [repository](https://github.com/diegonaranjo94/proyecto_final_miso_arquitectura/blob/main/README.md). The most important aspects of this projects are:
+This is a graduation project for Master's of Engineering in Software. The scope of this project is limited to backend for an ERP designed previously by a team of 4. You can check more about the design and modules to understand the backend better in this [repository](https://github.com/diegonaranjo94/proyecto_final_miso_arquitectura/tree/main). The most important aspects of this projects are:
 
 ## Python Version
 - **Python 3.12** (see Pipfile and Dockerfile for each microservice)
