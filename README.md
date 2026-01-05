@@ -110,7 +110,7 @@ proyecto_final_miso_back/
 
 ### API Endpoints
 
-
+To see detailed information about each enpoint in this project please check the [Postman collection file](https://github.com/proyectoFinalMiso/proyecto_final_miso_back/blob/main/proyecto_final.postman_collection.json) with all the details.
 
 ---
 
