@@ -1,0 +1,827 @@
+{
+	"info": {
+		"_postman_id": "39c7d84a-d341-44db-8329-6471f60137fa",
+		"name": "proyecto_final",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16015942",
+		"_collection_link": "https://dark-rocket-805494.postman.co/workspace/a2b94d83-b227-425e-8521-ad07df4b5a24/collection/16015942-39c7d84a-d341-44db-8329-6471f60137fa?action=share&source=collection_link&creator=16015942"
+	},
+	"item": [
+		{
+			"name": "vendedor",
+			"item": [
+				{
+					"name": "plan_ventas",
+					"item": [
+						{
+							"name": "crear_plan_ventas",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"vendedor_id\": \"8f2fd62f-98dc-4956-a366-09ed52919e75\", \n    \"vendedor_nombre\": \"Simon\",\n    \"estado\": \"INICIADO\",\n    \"fecha_inicio\": \"2025-05-15 21:55:05.379009\",\n    \"meta_ventas\": \"300000\",\n    \"productos_plan\": \"['Comedor 4 puestos', 'Biblioteca 1m x 0.9m', 'Centro de entretenimiento 1.5 m']\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3005/crear_plan_ventas",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3005",
+									"path": [
+										"crear_plan_ventas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "listar_planes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:3005/listar_planes",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3005",
+									"path": [
+										"listar_planes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "finalizar_plan",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"0a537e4b-07de-4fa4-90a3-a9d4ef62d6e2\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3005/finalizar_plan",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3005",
+									"path": [
+										"finalizar_plan"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "health_check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:3005/ping",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3005",
+							"path": [
+								"ping"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "crear_vendedor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Diego Naranjo\",\n    \"email\": \"Diego@ccp.com\",\n    \"contrasena\": \"holamundo\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3005/crear_vendedor",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3005",
+							"path": [
+								"crear_vendedor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtener_vendedor",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"diegoanr40@hotmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3005/obtener_vendedor",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3005",
+							"path": [
+								"obtener_vendedor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar_vendedores",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:3005/listar_vendedores",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3005",
+							"path": [
+								"listar_vendedores"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "producto",
+			"item": [
+				{
+					"name": "crear_producto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_fabricante\": \"311ad106-3344-4592-be25-0d62feeb1709\",\r\n    \"nombre\": \"granola 1000 g\",\r\n    \"valorUnitario\": \"100\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3001/producto",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3001",
+							"path": [
+								"producto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buscador_producto",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Fabricante",
+			"item": [
+				{
+					"name": "crear_fabricante",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Laika inc\",\r\n    \"pais\": \"Alemania\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3001/fabricante",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3001",
+							"path": [
+								"fabricante"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bodega",
+			"item": [
+				{
+					"name": "bodega",
+					"item": [
+						{
+							"name": "crear_bodega",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nombre\":\"Bodega la hormiga\",\n    \"direccion\":\"Calle Rambla María Eugenia Briseño, 96\",\n    \"latitude\": \"0.4493223\",\n    \"longitude\": \"-76.8784528\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3006/crear_bodega",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3006",
+									"path": [
+										"crear_bodega"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "listar_bodegas",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:3006/listar_bodegas",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3006",
+									"path": [
+										"listar_bodegas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "listar_bodegas Copy",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:3006/listar_bodegas",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3006",
+									"path": [
+										"listar_bodegas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Inventario Necesidad",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:3006/listar_bodegas",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3006",
+									"path": [
+										"listar_bodegas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "buscador_bodega",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"clave\": \"Bogota\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3006/buscador_bodega",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3006",
+									"path": [
+										"buscador_bodega"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "eliminar_bodega",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"13f4d850-816f-4c54-b2fd-eb9ec6fbf971\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3010/bodega/eliminar_bodega",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3010",
+									"path": [
+										"bodega",
+										"eliminar_bodega"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "posicion",
+					"item": [
+						{
+							"name": "crear_posicion",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nombre_posicion\": \"AA1\",\n    \"bodega\": \"Bogota sur\",\n    \"volumen\": 10000.0\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3006/crear_posicion",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3006",
+									"path": [
+										"crear_posicion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "listar_posiciones",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:3006/listar_posiciones",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3006",
+									"path": [
+										"listar_posiciones"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "buscar_posicion",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"posicion\": \"de9e350d-31ee-45b1-91d5-5eede61d2a55\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3006/buscar_posicion",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3006",
+									"path": [
+										"buscar_posicion"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Inventario",
+					"item": [
+						{
+							"name": "crear_producto",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nombre\": \"Limpia Pisos Fabuloso Alternativa Al Cloro Fresca Lavanda x1L\",\n    \"bodega\": \"Bodega Bogota norte\",\n    \"lote\": \"LSRL0001\",\n    \"cantidad\": 10,\n    \"sku\": \"10001\",\n    \"valorUnitario\": 11.65,\n    \"volumen\": 0.002\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3006/stock_crear_producto",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3006",
+									"path": [
+										"stock_crear_producto"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "listar_inventario",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:3006/stock_listar_inventarios",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3006",
+									"path": [
+										"stock_listar_inventarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "reserva_inventario",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[{\r\n    \"sku\": \"10003\",\r\n    \"cantidad\": 10\r\n}]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3006/stock_reservar_inventario",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3006",
+									"path": [
+										"stock_reservar_inventario"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "necesidad_inventario",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:3006/inventario_necesidad",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3006",
+									"path": [
+										"inventario_necesidad"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "inventario_total",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:3006/inventario_total",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3006",
+									"path": [
+										"inventario_total"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ping",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:3006/ping",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3006",
+							"path": [
+								"ping"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "experimento_fabricante_ping",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3001/fabricante/ping",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3001",
+					"path": [
+						"fabricante",
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "experimento_fabricante_crear",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\": \"Cemex\",\r\n    \"pais\": \"Colombia\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3001/fabricante/crear",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3001",
+					"path": [
+						"fabricante",
+						"crear"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "experimento_pedido_ping",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3002/pedido/ping",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3002",
+					"path": [
+						"pedido",
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "experimento_pedido_crear",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"productos\":\"{array,de,productos}\",\r\n    \"cliente\":\"Diego\",\r\n    \"vendedor\":\"Alejandra\",\r\n    \"destino\":\"bogota\",\r\n    \"estado\":\"SOLICITADO\",\r\n    \"valorFactura\":\"33.33\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3002/pedido/crear",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3002",
+					"path": [
+						"pedido",
+						"crear"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
